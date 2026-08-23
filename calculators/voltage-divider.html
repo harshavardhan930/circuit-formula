@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Voltage Divider Calculator | Circuit Formula</title>
+
+    <meta name="description"
+          content="Easy voltage divider calculator. Calculate output voltage, input voltage, R1 or R2 using a resistor voltage divider.">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f8fa;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+
+        /* HEADER */
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #111827;
+        }
+
+
+        /* MAIN */
+
+        .section {
+            padding: 60px 0 80px;
+        }
+
+
+        /* BREADCRUMB */
+
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .breadcrumb a:hover {
+            color: #111827;
+            text-decoration: underline;
+        }
+
+
+        /* HEADING */
+
+        .page-heading {
+            margin-bottom: 35px;
+        }
+
+        .page-heading h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+
+        /* CALCULATOR */
+
+        .calculator-box {
+            max-width: 650px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 60px;
+        }
+
+
+        /* STEP */
+
+        .step {
+            margin-bottom: 30px;
+        }
+
+        .step-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .step h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+
+        /* OPTIONS */
+
+        .calculation-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .calculation-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 16px;
+            cursor: pointer;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+
+        .calculation-option:hover {
+            border-color: #9ca3af;
+        }
+
+        .calculation-option.selected {
+            border-color: #111827;
+            background: #f3f4f6;
+        }
+
+        .calculation-option strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .calculation-option span {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+
+        /* INPUTS */
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .input-help {
+            display: block;
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-row input {
+            flex: 1;
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-row input:focus {
+            border-color: #111827;
+        }
+
+        .unit {
+            width: 35px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+
+        /* BUTTONS */
+
+        .calculate-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .calculate-button:hover {
+            background: #374151;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #111827;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .reset-button:hover {
+            background: #d1d5db;
+        }
+
+
+        /* RESULT */
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 9px;
+            background: #f3f4f6;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .result-formula {
+            margin-top: 10px;
+            color: #6b7280;
+        }
+
+
+        /* INFORMATION */
+
+        .content {
+            max-width: 800px;
+        }
+
+        .content h2 {
+            margin-top: 35px;
+            margin-bottom: 12px;
+            font-size: 27px;
+        }
+
+        .content h3 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .content p {
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+
+        .content ul {
+            padding-left: 25px;
+            color: #4b5563;
+        }
+
+        .formula {
+            display: inline-block;
+            padding: 14px 20px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-weight: 700;
+            margin: 10px 0 20px;
+        }
+
+
+        /* FOOTER */
+
+        .footer {
+            background: #111827;
+            color: white;
+            padding-top: 45px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+        }
+
+        .copyright {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 650px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .page-heading h1 {
+                font-size: 34px;
+            }
+
+            .calculator-box {
+                padding: 20px;
+            }
+
+            .calculation-options {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="container nav">
+
+        <a href="../index.html" class="logo">
+            Circuit Formula
+        </a>
+
+        <nav class="nav-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../index.html#categories">
+                Categories
+            </a>
+
+            <a href="../index.html#calculators">
+                Calculators
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<section class="section">
+
+<div class="container">
+
+
+    <!-- BREADCRUMB -->
+
+    <div class="breadcrumb">
+
+        <a href="../index.html">
+            Home
+        </a>
+
+        <span>/</span>
+
+        <a href="../index.html#categories">
+            Circuit Design
+        </a>
+
+        <span>/</span>
+
+        <span>
+            Voltage Divider
+        </span>
+
+    </div>
+
+
+    <!-- HEADING -->
+
+    <div class="page-heading">
+
+        <h1>
+            Voltage Divider Calculator
+        </h1>
+
+        <p>
+            Calculate voltage divider values quickly and easily.
+        </p>
+
+    </div>
+
+
+    <!-- CALCULATOR -->
+
+    <div class="calculator-box">
+
+
+        <!-- STEP 1 -->
+
+        <div class="step">
+
+            <div class="step-number">
+                STEP 1
+            </div>
+
+            <h2>
+                What do you want to calculate?
+            </h2>
+
+
+            <div class="calculation-options">
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('outputVoltage', this)">
+
+                    <strong>
+                        Output Voltage
+                    </strong>
+
+                    <span>
+                        Calculate Vout
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('inputVoltage', this)">
+
+                    <strong>
+                        Input Voltage
+                    </strong>
+
+                    <span>
+                        Calculate Vin
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('r1', this)">
+
+                    <strong>
+                        R1
+                    </strong>
+
+                    <span>
+                        Calculate upper resistor
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('r2', this)">
+
+                    <strong>
+                        R2
+                    </strong>
+
+                    <span>
+                        Calculate lower resistor
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- STEP 2 -->
+
+        <div
+            class="step"
+            id="inputsSection"
+            style="display:none;">
+
+            <div class="step-number">
+                STEP 2
+            </div>
+
+            <h2>
+                Enter the values you know
+            </h2>
+
+
+            <!-- INPUT VOLTAGE -->
+
+            <div
+                class="input-group"
+                id="inputVoltageGroup">
+
+                <label for="inputVoltage">
+                    Input Voltage
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="inputVoltage"
+                        placeholder="Enter input voltage"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        V
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- OUTPUT VOLTAGE -->
+
+            <div
+                class="input-group"
+                id="outputVoltageGroup">
+
+                <label for="outputVoltage">
+                    Output Voltage
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="outputVoltage"
+                        placeholder="Enter output voltage"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        V
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- R1 -->
+
+            <div
+                class="input-group"
+                id="r1Group">
+
+                <label for="r1">
+                    R1
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="r1"
+                        placeholder="Enter R1"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        Ω
+                    </span>
+
+                </div>
+
+                <span class="input-help">
+                    R1 is the resistor connected to Vin.
+                </span>
+
+            </div>
+
+
+            <!-- R2 -->
+
+            <div
+                class="input-group"
+                id="r2Group">
+
+                <label for="r2">
+                    R2
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="r2"
+                        placeholder="Enter R2"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        Ω
+                    </span>
+
+                </div>
+
+                <span class="input-help">
+                    R2 is the resistor connected to ground.
+                </span>
+
+            </div>
+
+
+            <button
+                class="calculate-button"
+                onclick="calculate()">
+
+                Calculate
+
+            </button>
+
+
+            <button
+                class="reset-button"
+                onclick="resetCalculator()">
+
+                Reset
+
+            </button>
+
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div
+            id="result"
+            class="result">
+
+            <div class="result-title">
+                Result
+            </div>
+
+            <div
+                id="resultValue"
+                class="result-value">
+            </div>
+
+            <div
+                id="resultFormula"
+                class="result-formula">
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- INFORMATION -->
+
+    <article class="content">
+
+
+        <h2>
+            What is a Voltage Divider?
+        </h2>
+
+        <p>
+            A voltage divider uses two resistors to produce
+            a lower voltage from a higher input voltage.
+        </p>
+
+
+        <div class="formula">
+            Vout = Vin × R2 ÷ (R1 + R2)
+        </div>
+
+
+        <h2>
+            Voltage Divider Circuit
+        </h2>
+
+        <p>
+            The basic circuit has R1 connected between
+            the input voltage and output, while R2 connects
+            the output to ground.
+        </p>
+
+
+        <div class="formula">
+            Vin → R1 → Vout → R2 → GND
+        </div>
+
+
+        <h2>
+            Formulas
+        </h2>
+
+
+        <h3>
+            Output Voltage
+        </h3>
+
+        <div class="formula">
+            Vout = Vin × R2 ÷ (R1 + R2)
+        </div>
+
+
+        <h3>
+            Input Voltage
+        </h3>
+
+        <div class="formula">
+            Vin = Vout × (R1 + R2) ÷ R2
+        </div>
+
+
+        <h3>
+            R1
+        </h3>
+
+        <div class="formula">
+            R1 = R2 × (Vin ÷ Vout - 1)
+        </div>
+
+
+        <h3>
+            R2
+        </h3>
+
+        <div class="formula">
+            R2 = R1 × Vout ÷ (Vin - Vout)
+        </div>
+
+
+        <h2>
+            Example
+        </h2>
+
+        <p>
+            Suppose you have:
+        </p>
+
+        <ul>
+
+            <li>
+                Vin = 12 V
+            </li>
+
+            <li>
+                R1 = 10 kΩ
+            </li>
+
+            <li>
+                R2 = 10 kΩ
+            </li>
+
+        </ul>
+
+
+        <div class="formula">
+            Vout = 12 × 10000 ÷ (10000 + 10000)
+        </div>
+
+
+        <p>
+            Vout = 6 V
+        </p>
+
+
+        <h2>
+            Common Applications
+        </h2>
+
+        <ul>
+
+            <li>
+                ADC voltage measurement
+            </li>
+
+            <li>
+                Microcontroller circuits
+            </li>
+
+            <li>
+                Sensor circuits
+            </li>
+
+            <li>
+                Analog circuits
+            </li>
+
+            <li>
+                Reference voltage circuits
+            </li>
+
+        </ul>
+
+
+    </article>
+
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div>
+
+            <div class="logo">
+                Circuit Formula
+            </div>
+
+            <p>
+                Electronics calculators for circuit design,
+                embedded systems, RF, PCB and power electronics.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../about.html">
+                About
+            </a>
+
+            <a href="../contact.html">
+                Contact
+            </a>
+
+            <a href="../privacy.html">
+                Privacy
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 Circuit Formula. All rights reserved.
+
+    </div>
+
+</footer>
+
+
+<script>
+
+let selectedCalculation = "";
+
+
+function selectCalculation(type, element) {
+
+    selectedCalculation = type;
+
+
+    document
+        .querySelectorAll(".calculation-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    element.classList.add("selected");
+
+
+    document.getElementById("inputsSection").style.display = "block";
+
+
+    hideAllInputs();
+
+
+    if (type === "outputVoltage") {
+
+        showInput("inputVoltageGroup");
+        showInput("r1Group");
+        showInput("r2Group");
+
+    }
+
+
+    else if (type === "inputVoltage") {
+
+        showInput("outputVoltageGroup");
+        showInput("r1Group");
+        showInput("r2Group");
+
+    }
+
+
+    else if (type === "r1") {
+
+        showInput("inputVoltageGroup");
+        showInput("outputVoltageGroup");
+        showInput("r2Group");
+
+    }
+
+
+    else if (type === "r2") {
+
+        showInput("inputVoltageGroup");
+        showInput("outputVoltageGroup");
+        showInput("r1Group");
+
+    }
+
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+
+}
+
+
+function hideAllInputs() {
+
+    document.getElementById("inputVoltageGroup").style.display = "none";
+
+    document.getElementById("outputVoltageGroup").style.display = "none";
+
+    document.getElementById("r1Group").style.display = "none";
+
+    document.getElementById("r2Group").style.display = "none";
+
+}
+
+
+function showInput(id) {
+
+    document.getElementById(id).style.display = "block";
+
+}
+
+
+function calculate() {
+
+    const Vin =
+        parseFloat(
+            document.getElementById("inputVoltage").value
+        );
+
+    const Vout =
+        parseFloat(
+            document.getElementById("outputVoltage").value
+        );
+
+    const R1 =
+        parseFloat(
+            document.getElementById("r1").value
+        );
+
+    const R2 =
+        parseFloat(
+            document.getElementById("r2").value
+        );
+
+
+    let answer;
+
+    let unit;
+
+    let formula;
+
+
+    /* OUTPUT VOLTAGE */
+
+    if (selectedCalculation === "outputVoltage") {
+
+        if (
+            isNaN(Vin) ||
+            isNaN(R1) ||
+            isNaN(R2)
+        ) {
+
+            showError(
+                "Please enter input voltage, R1 and R2."
+            );
+
+            return;
+        }
+
+
+        if (R1 <= 0 || R2 <= 0) {
+
+            showError(
+                "R1 and R2 must be greater than zero."
+            );
+
+            return;
+        }
+
+
+        answer =
+            Vin * R2 / (R1 + R2);
+
+        unit = "V";
+
+
+        formula =
+            "Vout = Vin × R2 ÷ (R1 + R2)";
+
+
+    }
+
+
+    /* INPUT VOLTAGE */
+
+    else if (selectedCalculation === "inputVoltage") {
+
+        if (
+            isNaN(Vout) ||
+            isNaN(R1) ||
+            isNaN(R2)
+        ) {
+
+            showError(
+                "Please enter output voltage, R1 and R2."
+            );
+
+            return;
+        }
+
+
+        if (R1 <= 0 || R2 <= 0) {
+
+            showError(
+                "R1 and R2 must be greater than zero."
+            );
+
+            return;
+        }
+
+
+        answer =
+            Vout * (R1 + R2) / R2;
+
+        unit = "V";
+
+
+        formula =
+            "Vin = Vout × (R1 + R2) ÷ R2";
+
+    }
+
+
+    /* R1 */
+
+    else if (selectedCalculation === "r1") {
+
+        if (
+            isNaN(Vin) ||
+            isNaN(Vout) ||
+            isNaN(R2)
+        ) {
+
+            showError(
+                "Please enter Vin, Vout and R2."
+            );
+
+            return;
+        }
+
+
+        if (Vout <= 0 || Vin <= Vout || R2 <= 0) {
+
+            showError(
+                "Vin must be greater than Vout, and R2 must be greater than zero."
+            );
+
+            return;
+        }
+
+
+        answer =
+            R2 * (Vin / Vout - 1);
+
+        unit = "Ω";
+
+
+        formula =
+            "R1 = R2 × (Vin ÷ Vout - 1)";
+
+    }
+
+
+    /* R2 */
+
+    else if (selectedCalculation === "r2") {
+
+        if (
+            isNaN(Vin) ||
+            isNaN(Vout) ||
+            isNaN(R1)
+        ) {
+
+            showError(
+                "Please enter Vin, Vout and R1."
+            );
+
+            return;
+        }
+
+
+        if (Vout <= 0 || Vin <= Vout || R1 <= 0) {
+
+            showError(
+                "Vin must be greater than Vout, and R1 must be greater than zero."
+            );
+
+            return;
+        }
+
+
+        answer =
+            R1 * Vout / (Vin - Vout);
+
+        unit = "Ω";
+
+
+        formula =
+            "R2 = R1 × Vout ÷ (Vin - Vout)";
+
+    }
+
+
+    else {
+
+        showError(
+            "Please select what you want to calculate."
+        );
+
+        return;
+
+    }
+
+
+    document.getElementById("resultValue").textContent =
+        formatResistanceOrVoltage(answer, unit);
+
+
+    document.getElementById("resultFormula").textContent =
+        formula;
+
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function showError(message) {
+
+    document.getElementById("resultValue").textContent =
+        "Check your input";
+
+    document.getElementById("resultFormula").textContent =
+        message;
+
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function formatResistanceOrVoltage(value, unit) {
+
+    if (!Number.isFinite(value)) {
+        return "Invalid";
+    }
+
+
+    if (unit === "Ω") {
+
+        if (value >= 1000000) {
+
+            return (
+                (value / 1000000).toFixed(4)
+                + " MΩ"
+            );
+
+        }
+
+
+        if (value >= 1000) {
+
+            return (
+                (value / 1000).toFixed(4)
+                + " kΩ"
+            );
+
+        }
+
+    }
+
+
+    return Number(
+        value.toFixed(6)
+    ) + " " + unit;
+
+}
+
+
+function resetCalculator() {
+
+    selectedCalculation = "";
+
+
+    document.getElementById("inputVoltage").value = "";
+
+    document.getElementById("outputVoltage").value = "";
+
+    document.getElementById("r1").value = "";
+
+    document.getElementById("r2").value = "";
+
+
+    hideAllInputs();
+
+
+    document.getElementById("inputsSection").style.display = "none";
+
+
+    document
+        .querySelectorAll(".calculation-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+
+}
+
+</script>
+
+
+</body>
+
+</html>

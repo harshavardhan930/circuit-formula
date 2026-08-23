@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>RF Wavelength Calculator | Circuit Formula</title>
+
+    <meta name="description"
+          content="Calculate RF wavelength, frequency, propagation speed and quarter-wave antenna length for radio frequency and electronics applications.">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f8fa;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #111827;
+        }
+
+        .section {
+            padding: 60px 0 80px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .breadcrumb a:hover {
+            color: #111827;
+            text-decoration: underline;
+        }
+
+        .page-heading {
+            margin-bottom: 35px;
+        }
+
+        .page-heading h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+        .calculator-box {
+            max-width: 850px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 60px;
+        }
+
+        .step {
+            margin-bottom: 30px;
+        }
+
+        .step-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .step h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        .calculation-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .calculation-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 16px;
+            cursor: pointer;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+
+        .calculation-option:hover {
+            border-color: #9ca3af;
+        }
+
+        .calculation-option.selected {
+            border-color: #111827;
+            background: #f3f4f6;
+        }
+
+        .calculation-option strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .calculation-option span {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .rf-diagram {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .diagram-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .wave {
+            width: 100%;
+            max-width: 650px;
+            height: 120px;
+            margin: auto;
+        }
+
+        .wave svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .wave-label {
+            margin-top: 5px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .input-help {
+            display: block;
+            margin-top: 5px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-row input,
+        .input-row select {
+            flex: 1;
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 16px;
+            outline: none;
+            background: #ffffff;
+        }
+
+        .input-row input:focus,
+        .input-row select:focus {
+            border-color: #111827;
+        }
+
+        .unit {
+            min-width: 60px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .calculate-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .calculate-button:hover {
+            background: #374151;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #111827;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .reset-button:hover {
+            background: #d1d5db;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 9px;
+            background: #f3f4f6;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .result-details {
+            margin-top: 12px;
+            color: #4b5563;
+        }
+
+        .content {
+            max-width: 850px;
+        }
+
+        .content h2 {
+            margin-top: 35px;
+            margin-bottom: 12px;
+            font-size: 27px;
+        }
+
+        .content p {
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+
+        .content ul {
+            padding-left: 25px;
+            color: #4b5563;
+        }
+
+        .formula {
+            display: inline-block;
+            padding: 14px 20px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-weight: 700;
+            margin: 10px 0 20px;
+        }
+
+        .footer {
+            background: #111827;
+            color: white;
+            padding-top: 45px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+        }
+
+        .copyright {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        @media (max-width: 650px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .page-heading h1 {
+                font-size: 34px;
+            }
+
+            .calculator-box {
+                padding: 20px;
+            }
+
+            .calculation-options {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="container nav">
+
+        <a href="../index.html" class="logo">
+            Circuit Formula
+        </a>
+
+        <nav class="nav-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../index.html#categories">
+                Categories
+            </a>
+
+            <a href="../index.html#calculators">
+                Calculators
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<section class="section">
+
+<div class="container">
+
+
+    <div class="breadcrumb">
+
+        <a href="../index.html">
+            Home
+        </a>
+
+        <span>/</span>
+
+        <a href="../index.html#categories">
+            RF Electronics
+        </a>
+
+        <span>/</span>
+
+        <span>
+            RF Wavelength
+        </span>
+
+    </div>
+
+
+    <div class="page-heading">
+
+        <h1>
+            RF Wavelength Calculator
+        </h1>
+
+        <p>
+            Calculate RF wavelength, frequency, propagation speed and antenna wavelength fractions.
+        </p>
+
+    </div>
+
+
+    <div class="calculator-box">
+
+
+        <div class="rf-diagram">
+
+            <div class="diagram-title">
+                RF Wave
+            </div>
+
+            <div class="wave">
+
+                <svg
+                    viewBox="0 0 700 120"
+                    preserveAspectRatio="none">
+
+                    <polyline
+                        points="0,60 25,35 50,15 75,35 100,60 125,85 150,105 175,85 200,60 225,35 250,15 275,35 300,60 325,85 350,105 375,85 400,60 425,35 450,15 475,35 500,60 525,85 550,105 575,85 600,60 625,35 650,15 675,35 700,60"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="4"/>
+
+                </svg>
+
+            </div>
+
+            <div class="wave-label">
+                One complete cycle represents one wavelength
+            </div>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                STEP 1
+            </div>
+
+            <h2>
+                What do you want to calculate?
+            </h2>
+
+
+            <div class="calculation-options">
+
+
+                <div
+                    class="calculation-option selected"
+                    onclick="selectCalculation('wavelength', this)">
+
+                    <strong>
+                        Wavelength
+                    </strong>
+
+                    <span>
+                        Calculate wavelength from frequency
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('frequency', this)">
+
+                    <strong>
+                        Frequency
+                    </strong>
+
+                    <span>
+                        Calculate frequency from wavelength
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('speed', this)">
+
+                    <strong>
+                        Propagation Speed
+                    </strong>
+
+                    <span>
+                        Calculate wave speed
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('quarter', this)">
+
+                    <strong>
+                        Quarter-Wave Length
+                    </strong>
+
+                    <span>
+                        Calculate λ/4 antenna length
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('half', this)">
+
+                    <strong>
+                        Half-Wave Length
+                    </strong>
+
+                    <span>
+                        Calculate λ/2 antenna length
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                STEP 2
+            </div>
+
+            <h2>
+                Enter the values you know
+            </h2>
+
+
+            <div class="input-group">
+
+                <label for="frequency">
+                    Frequency
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="frequency"
+                        placeholder="Example: 100"
+                        step="any"
+                        min="0">
+
+                    <select id="frequencyUnit">
+
+                        <option value="1">
+                            Hz
+                        </option>
+
+                        <option value="1000">
+                            kHz
+                        </option>
+
+                        <option value="1000000" selected>
+                            MHz
+                        </option>
+
+                        <option value="1000000000">
+                            GHz
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <span class="input-help">
+                    Enter the RF signal frequency.
+                </span>
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="wavelength">
+                    Wavelength
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="wavelength"
+                        placeholder="Example: 3"
+                        step="any"
+                        min="0">
+
+                    <select id="wavelengthUnit">
+
+                        <option value="0.001">
+                            mm
+                        </option>
+
+                        <option value="0.01">
+                            cm
+                        </option>
+
+                        <option value="1" selected>
+                            m
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <span class="input-help">
+                    Wavelength in free space or the selected medium.
+                </span>
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="speed">
+                    Propagation Speed
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="speed"
+                        placeholder="Leave empty for speed of light"
+                        step="any"
+                        min="0">
+
+                    <select id="speedUnit">
+
+                        <option value="1">
+                            m/s
+                        </option>
+
+                        <option value="1000000">
+                            Mm/s
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <span class="input-help">
+                    For free space, use approximately 299,792,458 m/s.
+                </span>
+
+            </div>
+
+
+            <button
+                class="calculate-button"
+                onclick="calculate()">
+
+                Calculate
+
+            </button>
+
+
+            <button
+                class="reset-button"
+                onclick="resetCalculator()">
+
+                Reset
+
+            </button>
+
+
+        </div>
+
+
+        <div
+            id="result"
+            class="result">
+
+            <div class="result-title">
+                Result
+            </div>
+
+            <div
+                id="resultValue"
+                class="result-value">
+            </div>
+
+            <div
+                id="resultDetails"
+                class="result-details">
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <article class="content">
+
+
+        <h2>
+            RF Wavelength Formula
+        </h2>
+
+        <div class="formula">
+            λ = v ÷ f
+        </div>
+
+        <p>
+            λ is wavelength, v is propagation speed and f is frequency.
+        </p>
+
+
+        <h2>
+            Speed of Light
+        </h2>
+
+        <p>
+            For a radio wave traveling through free space,
+            the propagation speed is approximately 299,792,458 m/s.
+        </p>
+
+
+        <h2>
+            Example
+        </h2>
+
+        <p>
+            Consider an RF signal operating at 100 MHz in free space.
+        </p>
+
+        <div class="formula">
+            λ = 299,792,458 ÷ 100,000,000
+        </div>
+
+        <p>
+            The wavelength is approximately 2.998 meters.
+        </p>
+
+
+        <h2>
+            Quarter-Wave Antenna</h2>
+
+        <div class="formula">
+            L = λ ÷ 4
+        </div>
+
+        <p>
+            A quarter-wave antenna has a physical length based on
+            approximately one quarter of the wavelength.
+        </p>
+
+
+        <h2>
+            Half-Wave Antenna
+        </h2>
+
+        <div class="formula">
+            L = λ ÷ 2
+        </div>
+
+
+        <h2>
+            Common RF Frequencies
+        </h2>
+
+        <ul>
+
+            <li>
+                433 MHz
+            </li>
+
+            <li>
+                868 MHz
+            </li>
+
+            <li>
+                915 MHz
+            </li>
+
+            <li>
+                1.2 GHz
+            </li>
+
+            <li>
+                2.4 GHz
+            </li>
+
+            <li>
+                5.8 GHz
+            </li>
+
+            <li>
+                10 GHz
+            </li>
+
+        </ul>
+
+
+        <h2>
+            RF and Antenna Design
+        </h2>
+
+        <p>
+            Wavelength is important when designing antennas,
+            transmission lines, RF layouts and microwave circuits.
+        </p>
+
+        <p>
+            The physical length of an antenna can differ from the
+            simple wavelength calculation because of conductor geometry,
+            surrounding materials, dielectric effects and the antenna design.
+        </p>
+
+
+    </article>
+
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div>
+
+            <div class="logo">
+                Circuit Formula
+            </div>
+
+            <p>
+                Electronics calculators for circuit design,
+                embedded systems, RF, PCB and power electronics.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../about.html">
+                About
+            </a>
+
+            <a href="../contact.html">
+                Contact
+            </a>
+
+            <a href="../privacy.html">
+                Privacy
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 Circuit Formula. All rights reserved.
+
+    </div>
+
+</footer>
+
+
+<script>
+
+const SPEED_OF_LIGHT = 299792458;
+
+let selectedCalculation = "wavelength";
+
+
+function selectCalculation(type, element) {
+
+    selectedCalculation = type;
+
+    document
+        .querySelectorAll(".calculation-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+    element.classList.add("selected");
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+}
+
+
+function getFrequency() {
+
+    const value =
+        parseFloat(
+            document.getElementById("frequency").value
+        );
+
+    const unit =
+        parseFloat(
+            document.getElementById("frequencyUnit").value
+        );
+
+    if (!Number.isFinite(value)) {
+        return NaN;
+    }
+
+    return value * unit;
+}
+
+
+function getWavelength() {
+
+    const value =
+        parseFloat(
+            document.getElementById("wavelength").value
+        );
+
+    const unit =
+        parseFloat(
+            document.getElementById("wavelengthUnit").value
+        );
+
+    if (!Number.isFinite(value)) {
+        return NaN;
+    }
+
+    return value * unit;
+}
+
+
+function getSpeed() {
+
+    const value =
+        parseFloat(
+            document.getElementById("speed").value
+        );
+
+    const unit =
+        parseFloat(
+            document.getElementById("speedUnit").value
+        );
+
+    if (!Number.isFinite(value)) {
+        return SPEED_OF_LIGHT;
+    }
+
+    return value * unit;
+}
+
+
+function calculate() {
+
+    const frequency = getFrequency();
+
+    const wavelength = getWavelength();
+
+    const speed = getSpeed();
+
+
+    let result;
+
+    let details;
+
+
+    if (selectedCalculation === "wavelength") {
+
+        if (
+            !validPositive(frequency) ||
+            !validPositive(speed)
+        ) {
+
+            showError(
+                "Enter a valid frequency and propagation speed."
+            );
+
+            return;
+        }
+
+
+        result = speed / frequency;
+
+
+        details =
+            "Formula: λ = v ÷ f" +
+            "<br><br>" +
+            "Frequency: " +
+            formatFrequency(frequency) +
+            "<br>" +
+            "Propagation Speed: " +
+            formatSpeed(speed);
+
+
+        showResult(
+            formatWavelength(result),
+            details
+        );
+
+        return;
+    }
+
+
+    if (selectedCalculation === "frequency") {
+
+        if (
+            !validPositive(wavelength) ||
+            !validPositive(speed)
+        ) {
+
+            showError(
+                "Enter a valid wavelength and propagation speed."
+            );
+
+            return;
+        }
+
+
+        result = speed / wavelength;
+
+
+        details =
+            "Formula: f = v ÷ λ" +
+            "<br><br>" +
+            "Wavelength: " +
+            formatWavelength(wavelength) +
+            "<br>" +
+            "Propagation Speed: " +
+            formatSpeed(speed);
+
+
+        showResult(
+            formatFrequency(result),
+            details
+        );
+
+        return;
+    }
+
+
+    if (selectedCalculation === "speed") {
+
+        if (
+            !validPositive(frequency) ||
+            !validPositive(wavelength)
+        ) {
+
+            showError(
+                "Enter a valid frequency and wavelength."
+            );
+
+            return;
+        }
+
+
+        result = frequency * wavelength;
+
+
+        details =
+            "Formula: v = f × λ" +
+            "<br><br>" +
+            "Frequency: " +
+            formatFrequency(frequency) +
+            "<br>" +
+            "Wavelength: " +
+            formatWavelength(wavelength);
+
+
+        showResult(
+            formatSpeed(result),
+            details
+        );
+
+        return;
+    }
+
+
+    if (selectedCalculation === "quarter") {
+
+        if (
+            !validPositive(frequency) ||
+            !validPositive(speed)
+        ) {
+
+            showError(
+                "Enter a valid frequency and propagation speed."
+            );
+
+            return;
+        }
+
+
+        const fullWavelength =
+            speed / frequency;
+
+
+        result =
+            fullWavelength / 4;
+
+
+        details =
+            "Formula: L = λ ÷ 4" +
+            "<br><br>" +
+            "Full wavelength: " +
+            formatWavelength(fullWavelength) +
+            "<br>" +
+            "Frequency: " +
+            formatFrequency(frequency);
+
+
+        showResult(
+            formatWavelength(result),
+            details
+        );
+
+        return;
+    }
+
+
+    if (selectedCalculation === "half") {
+
+        if (
+            !validPositive(frequency) ||
+            !validPositive(speed)
+        ) {
+
+            showError(
+                "Enter a valid frequency and propagation speed."
+            );
+
+            return;
+        }
+
+
+        const fullWavelength =
+            speed / frequency;
+
+
+        result =
+            fullWavelength / 2;
+
+
+        details =
+            "Formula: L = λ ÷ 2" +
+            "<br><br>" +
+            "Full wavelength: " +
+            formatWavelength(fullWavelength) +
+            "<br>" +
+            "Frequency: " +
+            formatFrequency(frequency);
+
+
+        showResult(
+            formatWavelength(result),
+            details
+        );
+
+    }
+
+}
+
+
+function validPositive(value) {
+
+    return (
+        Number.isFinite(value) &&
+        value > 0
+    );
+
+}
+
+
+function formatFrequency(value) {
+
+    if (value >= 1000000000) {
+
+        return (
+            Number(
+                (value / 1000000000).toFixed(6)
+            ) + " GHz"
+        );
+
+    }
+
+    if (value >= 1000000) {
+
+        return (
+            Number(
+                (value / 1000000).toFixed(6)
+            ) + " MHz"
+        );
+
+    }
+
+    if (value >= 1000) {
+
+        return (
+            Number(
+                (value / 1000).toFixed(6)
+            ) + " kHz"
+        );
+
+    }
+
+    return (
+        Number(
+            value.toFixed(6)
+        ) + " Hz"
+    );
+
+}
+
+
+function formatWavelength(value) {
+
+    if (value >= 1) {
+
+        return (
+            Number(
+                value.toFixed(6)
+            ) + " m"
+        );
+
+    }
+
+    if (value >= 0.01) {
+
+        return (
+            Number(
+                (value * 100).toFixed(6)
+            ) + " cm"
+        );
+
+    }
+
+    if (value >= 0.001) {
+
+        return (
+            Number(
+                (value * 1000).toFixed(6)
+            ) + " mm"
+        );
+
+    }
+
+    return (
+        Number(
+            (value * 1000000).toFixed(6)
+        ) + " µm"
+    );
+
+}
+
+
+function formatSpeed(value) {
+
+    if (value >= 1000000) {
+
+        return (
+            Number(
+                (value / 1000000).toFixed(6)
+            ) + " Mm/s"
+        );
+
+    }
+
+    if (value >= 1000) {
+
+        return (
+            Number(
+                (value / 1000).toFixed(6)
+            ) + " km/s"
+        );
+
+    }
+
+    return (
+        Number(
+            value.toFixed(6)
+        ) + " m/s"
+    );
+
+}
+
+
+function showResult(value, details) {
+
+    document.getElementById("resultValue").textContent =
+        value;
+
+    document.getElementById("resultDetails").innerHTML =
+        details;
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function showError(message) {
+
+    document.getElementById("resultValue").textContent =
+        "Check your input";
+
+    document.getElementById("resultDetails").textContent =
+        message;
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function resetCalculator() {
+
+    document.getElementById("frequency").value = "";
+
+    document.getElementById("wavelength").value = "";
+
+    document.getElementById("speed").value = "";
+
+    document.getElementById("frequencyUnit").value =
+        "1000000";
+
+    document.getElementById("wavelengthUnit").value =
+        "1";
+
+    document.getElementById("speedUnit").value =
+        "1";
+
+    selectedCalculation = "wavelength";
+
+
+    document
+        .querySelectorAll(".calculation-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    document
+        .querySelector(".calculation-option")
+        .classList.add("selected");
+
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+
+}
+
+</script>
+
+
+</body>
+
+</html>

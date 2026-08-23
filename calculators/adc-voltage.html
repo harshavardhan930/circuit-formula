@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ADC Voltage Calculator | Circuit Formula</title>
+
+    <meta name="description"
+          content="Calculate analog voltage from ADC counts, ADC resolution, reference voltage, and calculate ADC resolution in embedded systems.">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f8fa;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #111827;
+        }
+
+        .section {
+            padding: 60px 0 80px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .breadcrumb a:hover {
+            color: #111827;
+            text-decoration: underline;
+        }
+
+        .page-heading {
+            margin-bottom: 35px;
+        }
+
+        .page-heading h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+        .calculator-box {
+            max-width: 850px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 60px;
+        }
+
+        .step {
+            margin-bottom: 30px;
+        }
+
+        .step-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .step h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        .calculation-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .calculation-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 16px;
+            cursor: pointer;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+
+        .calculation-option:hover {
+            border-color: #9ca3af;
+        }
+
+        .calculation-option.selected {
+            border-color: #111827;
+            background: #f3f4f6;
+        }
+
+        .calculation-option strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .calculation-option span {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .adc-diagram {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .diagram-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .diagram-block {
+            padding: 18px 24px;
+            background: #ffffff;
+            border: 2px solid #374151;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .analog {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .digital {
+            border-color: #059669;
+            color: #059669;
+        }
+
+        .arrow {
+            font-size: 22px;
+            color: #6b7280;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .input-help {
+            display: block;
+            margin-top: 5px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-row input,
+        .input-row select {
+            flex: 1;
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 16px;
+            outline: none;
+            background: #ffffff;
+        }
+
+        .input-row input:focus,
+        .input-row select:focus {
+            border-color: #111827;
+        }
+
+        .unit {
+            min-width: 50px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .calculate-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .calculate-button:hover {
+            background: #374151;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #111827;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .reset-button:hover {
+            background: #d1d5db;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 9px;
+            background: #f3f4f6;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .result-details {
+            margin-top: 12px;
+            color: #4b5563;
+        }
+
+        .content {
+            max-width: 850px;
+        }
+
+        .content h2 {
+            margin-top: 35px;
+            margin-bottom: 12px;
+            font-size: 27px;
+        }
+
+        .content p {
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+
+        .content ul {
+            padding-left: 25px;
+            color: #4b5563;
+        }
+
+        .formula {
+            display: inline-block;
+            padding: 14px 20px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-weight: 700;
+            margin: 10px 0 20px;
+        }
+
+        .footer {
+            background: #111827;
+            color: white;
+            padding-top: 45px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+        }
+
+        .copyright {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        @media (max-width: 650px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .page-heading h1 {
+                font-size: 34px;
+            }
+
+            .calculator-box {
+                padding: 20px;
+            }
+
+            .calculation-options {
+                grid-template-columns: 1fr;
+            }
+
+            .diagram {
+                flex-direction: column;
+            }
+
+            .arrow {
+                transform: rotate(90deg);
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="container nav">
+
+        <a href="../index.html" class="logo">
+            Circuit Formula
+        </a>
+
+        <nav class="nav-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../index.html#categories">
+                Categories
+            </a>
+
+            <a href="../index.html#calculators">
+                Calculators
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<section class="section">
+
+<div class="container">
+
+
+    <div class="breadcrumb">
+
+        <a href="../index.html">
+            Home
+        </a>
+
+        <span>/</span>
+
+        <a href="../index.html#categories">
+            Embedded Systems
+        </a>
+
+        <span>/</span>
+
+        <span>
+            ADC Voltage
+        </span>
+
+    </div>
+
+
+    <div class="page-heading">
+
+        <h1>
+            ADC Voltage Calculator
+        </h1>
+
+        <p>
+            Calculate analog input voltage from ADC counts, resolution and reference voltage.
+        </p>
+
+    </div>
+
+
+    <div class="calculator-box">
+
+
+        <div class="adc-diagram">
+
+            <div class="diagram-title">
+                Analog Signal to Digital Value
+            </div>
+
+            <div class="diagram">
+
+                <div class="diagram-block analog">
+                    Analog Input
+                    <br>
+                    Voltage
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+                <div class="diagram-block">
+                    ADC
+                </div>
+
+                <div class="arrow">
+                    →
+                </div>
+
+                <div class="diagram-block digital">
+                    ADC Count
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                STEP 1
+            </div>
+
+            <h2>
+                What do you want to calculate?
+            </h2>
+
+
+            <div class="calculation-options">
+
+
+                <div
+                    class="calculation-option selected"
+                    onclick="selectCalculation('voltage', this)">
+
+                    <strong>
+                        Input Voltage
+                    </strong>
+
+                    <span>
+                        Calculate voltage from ADC count
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('count', this)">
+
+                    <strong>
+                        ADC Count
+                    </strong>
+
+                    <span>
+                        Calculate ADC digital value from voltage
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('resolution', this)">
+
+                    <strong>
+                        ADC Resolution
+                    </strong>
+
+                    <span>
+                        Calculate voltage per ADC step
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('reference', this)">
+
+                    <strong>
+                        Reference Voltage
+                    </strong>
+
+                    <span>
+                        Calculate required ADC reference voltage
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                STEP 2
+            </div>
+
+            <h2>
+                Enter the values you know
+            </h2>
+
+
+            <div class="input-group">
+
+                <label for="adcCount">
+                    ADC Count
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="adcCount"
+                        placeholder="Example: 2048"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        counts
+                    </span>
+
+                </div>
+
+                <span class="input-help">
+                    Digital value returned by the ADC.
+                </span>
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="bits">
+                    ADC Resolution
+                </label>
+
+                <div class="input-row">
+
+                    <select id="bits">
+
+                        <option value="8">
+                            8-bit
+                        </option>
+
+                        <option value="10">
+                            10-bit
+                        </option>
+
+                        <option value="12" selected>
+                            12-bit
+                        </option>
+
+                        <option value="14">
+                            14-bit
+                        </option>
+
+                        <option value="16">
+                            16-bit
+                        </option>
+
+                        <option value="18">
+                            18-bit
+                        </option>
+
+                        <option value="24">
+                            24-bit
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <span class="input-help">
+                    Select the number of ADC bits.
+                </span>
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="reference">
+                    Reference Voltage
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="reference"
+                        placeholder="Example: 3.3"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        V
+                    </span>
+
+                </div>
+
+                <span class="input-help">
+                    ADC reference voltage, such as 3.3 V or 5 V.
+                </span>
+
+            </div>
+
+
+            <div class="input-group">
+
+                <label for="inputVoltage">
+                    Input Voltage
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="inputVoltage"
+                        placeholder="Example: 1.65"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        V
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="calculate-button"
+                onclick="calculate()">
+
+                Calculate
+
+            </button>
+
+
+            <button
+                class="reset-button"
+                onclick="resetCalculator()">
+
+                Reset
+
+            </button>
+
+
+        </div>
+
+
+        <div
+            id="result"
+            class="result">
+
+            <div class="result-title">
+                Result
+            </div>
+
+            <div
+                id="resultValue"
+                class="result-value">
+            </div>
+
+            <div
+                id="resultDetails"
+                class="result-details">
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <article class="content">
+
+
+        <h2>
+            What is an ADC?
+        </h2>
+
+        <p>
+            An ADC, or Analog to Digital Converter, converts an analog
+            voltage into a digital number that a microcontroller can process.
+        </p>
+
+
+        <h2>
+            ADC Voltage Formula
+        </h2>
+
+        <div class="formula">
+            Voltage = ADC Count × Vref ÷ (2ⁿ - 1)
+        </div>
+
+        <p>
+            n is the ADC resolution in bits.
+            Vref is the ADC reference voltage.
+        </p>
+
+
+        <h2>
+            ADC Count Formula
+        </h2>
+
+        <div class="formula">
+            ADC Count = Voltage × (2ⁿ - 1) ÷ Vref
+        </div>
+
+
+        <h2>
+            ADC Resolution
+        </h2>
+
+        <div class="formula">
+            Voltage per Step = Vref ÷ (2ⁿ - 1)
+        </div>
+
+
+        <h2>
+            Example
+        </h2>
+
+        <p>
+            Consider a 12-bit ADC with a 3.3 V reference.
+            If the ADC returns a count of 2048:
+        </p>
+
+        <div class="formula">
+            Voltage = 2048 × 3.3 ÷ 4095
+        </div>
+
+        <p>
+            The measured voltage is approximately 1.6504 V.
+        </p>
+
+
+        <h2>
+            Common ADC Resolutions
+        </h2>
+
+        <ul>
+
+            <li>
+                8-bit ADC: 256 levels
+            </li>
+
+            <li>
+                10-bit ADC: 1024 levels
+            </li>
+
+            <li>
+                12-bit ADC: 4096 levels
+            </li>
+
+            <li>
+                14-bit ADC: 16384 levels
+            </li>
+
+            <li>
+                16-bit ADC: 65536 levels
+            </li>
+
+        </ul>
+
+
+        <h2>
+            ADC in Embedded Systems
+        </h2>
+
+        <p>
+            Microcontrollers such as STM32, ESP32, AVR and PIC
+            commonly include ADC peripherals for measuring sensors,
+            batteries, potentiometers and other analog signals.
+        </p>
+
+        <p>
+            The actual ADC behavior can depend on the MCU, reference
+            source, input range, calibration and ADC configuration.
+        </p>
+
+
+    </article>
+
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div>
+
+            <div class="logo">
+                Circuit Formula
+            </div>
+
+            <p>
+                Electronics calculators for circuit design,
+                embedded systems, RF, PCB and power electronics.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../about.html">
+                About
+            </a>
+
+            <a href="../contact.html">
+                Contact
+            </a>
+
+            <a href="../privacy.html">
+                Privacy
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 Circuit Formula. All rights reserved.
+
+    </div>
+
+</footer>
+
+
+<script>
+
+let selectedCalculation = "voltage";
+
+
+function selectCalculation(type, element) {
+
+    selectedCalculation = type;
+
+    document
+        .querySelectorAll(".calculation-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+    element.classList.add("selected");
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+}
+
+
+function calculate() {
+
+    const adcCount =
+        parseFloat(
+            document.getElementById("adcCount").value
+        );
+
+    const bits =
+        parseInt(
+            document.getElementById("bits").value
+        );
+
+    const reference =
+        parseFloat(
+            document.getElementById("reference").value
+        );
+
+    const inputVoltage =
+        parseFloat(
+            document.getElementById("inputVoltage").value
+        );
+
+
+    const maxCount =
+        Math.pow(2, bits) - 1;
+
+
+    let result;
+    let details;
+
+
+    if (selectedCalculation === "voltage") {
+
+        if (
+            !validNumber(adcCount) ||
+            !validPositive(reference)
+        ) {
+
+            showError(
+                "Enter ADC count and reference voltage."
+            );
+
+            return;
+        }
+
+
+        if (adcCount < 0 || adcCount > maxCount) {
+
+            showError(
+                "ADC count must be between 0 and " +
+                maxCount +
+                " for a " +
+                bits +
+                "-bit ADC."
+            );
+
+            return;
+        }
+
+
+        result =
+            adcCount *
+            reference /
+            maxCount;
+
+
+        details =
+            "Formula: V = ADC Count × Vref ÷ (2ⁿ - 1)" +
+            "<br><br>" +
+            "ADC Count: " +
+            adcCount +
+            "<br>" +
+            "Resolution: " +
+            bits +
+            "-bit" +
+            "<br>" +
+            "Maximum Count: " +
+            maxCount +
+            "<br>" +
+            "Vref: " +
+            reference +
+            " V";
+
+
+        showResult(
+            result.toFixed(6) + " V",
+            details
+        );
+
+        return;
+    }
+
+
+    if (selectedCalculation === "count") {
+
+        if (
+            !validNumber(inputVoltage) ||
+            !validPositive(reference)
+        ) {
+
+            showError(
+                "Enter input voltage and reference voltage."
+            );
+
+            return;
+        }
+
+
+        if (
+            inputVoltage < 0 ||
+            inputVoltage > reference
+        ) {
+
+            showError(
+                "Input voltage must be between 0 V and Vref."
+            );
+
+            return;
+        }
+
+
+        result =
+            inputVoltage *
+            maxCount /
+            reference;
+
+
+        details =
+            "Formula: ADC Count = V × (2ⁿ - 1) ÷ Vref" +
+            "<br><br>" +
+            "Input Voltage: " +
+            inputVoltage +
+            " V" +
+            "<br>" +
+            "Resolution: " +
+            bits +
+            "-bit" +
+            "<br>" +
+            "Vref: " +
+            reference +
+            " V";
+
+
+        showResult(
+            Math.round(result) +
+            " counts",
+            details +
+            "<br>Ideal ADC count before quantization: " +
+            result.toFixed(4)
+        );
+
+        return;
+    }
+
+
+    if (selectedCalculation === "resolution") {
+
+        if (!validPositive(reference)) {
+
+            showError(
+                "Enter reference voltage."
+            );
+
+            return;
+        }
+
+
+        result =
+            reference /
+            maxCount;
+
+
+        details =
+            "Formula: Resolution = Vref ÷ (2ⁿ - 1)" +
+            "<br><br>" +
+            "Resolution: " +
+            bits +
+            "-bit" +
+            "<br>" +
+            "Vref: " +
+            reference +
+            " V" +
+            "<br>" +
+            "ADC Levels: " +
+            (maxCount + 1).toLocaleString();
+
+
+        showResult(
+            formatVoltage(result),
+            details
+        );
+
+        return;
+    }
+
+
+    if (selectedCalculation === "reference") {
+
+        if (
+            !validNumber(inputVoltage) ||
+            !validNumber(adcCount) ||
+            adcCount <= 0
+        ) {
+
+            showError(
+                "Enter input voltage and a valid ADC count."
+            );
+
+            return;
+        }
+
+
+        if (adcCount > maxCount) {
+
+            showError(
+                "ADC count cannot exceed " +
+                maxCount +
+                " for a " +
+                bits +
+                "-bit ADC."
+            );
+
+            return;
+        }
+
+
+        result =
+            inputVoltage *
+            maxCount /
+            adcCount;
+
+
+        details =
+            "Formula: Vref = Voltage × (2ⁿ - 1) ÷ ADC Count" +
+            "<br><br>" +
+            "Input Voltage: " +
+            inputVoltage +
+            " V" +
+            "<br>" +
+            "ADC Count: " +
+            adcCount +
+            "<br>" +
+            "Resolution: " +
+            bits +
+            "-bit";
+
+
+        showResult(
+            result.toFixed(6) + " V",
+            details
+        );
+
+    }
+
+}
+
+
+function validNumber(value) {
+
+    return Number.isFinite(value);
+
+}
+
+
+function validPositive(value) {
+
+    return (
+        Number.isFinite(value) &&
+        value > 0
+    );
+
+}
+
+
+function formatVoltage(value) {
+
+    if (value >= 1) {
+
+        return (
+            Number(
+                value.toFixed(6)
+            ) + " V"
+        );
+
+    }
+
+
+    if (value >= 0.001) {
+
+        return (
+            Number(
+                (value * 1000).toFixed(6)
+            ) + " mV"
+        );
+
+    }
+
+
+    return (
+        Number(
+            (value * 1000000).toFixed(6)
+        ) + " µV"
+    );
+
+}
+
+
+function showResult(value, details) {
+
+    document.getElementById("resultValue").textContent =
+        value;
+
+    document.getElementById("resultDetails").innerHTML =
+        details;
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function showError(message) {
+
+    document.getElementById("resultValue").textContent =
+        "Check your input";
+
+    document.getElementById("resultDetails").textContent =
+        message;
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function resetCalculator() {
+
+    document.getElementById("adcCount").value = "";
+
+    document.getElementById("reference").value = "";
+
+    document.getElementById("inputVoltage").value = "";
+
+    document.getElementById("bits").value = "12";
+
+    selectedCalculation = "voltage";
+
+    document
+        .querySelectorAll(".calculation-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+    document
+        .querySelector(".calculation-option")
+        .classList.add("selected");
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+
+}
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resistor Color Code Calculator | Circuit Formula</title>
+
+    <meta name="description"
+          content="Calculate resistor value from color bands. Supports 4 band, 5 band and 6 band resistor color codes.">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f8fa;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #111827;
+        }
+
+        .section {
+            padding: 60px 0 80px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .breadcrumb a:hover {
+            color: #111827;
+            text-decoration: underline;
+        }
+
+        .page-heading {
+            margin-bottom: 35px;
+        }
+
+        .page-heading h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+        .calculator-box {
+            max-width: 850px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 60px;
+        }
+
+        .step {
+            margin-bottom: 30px;
+        }
+
+        .step-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .step h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        .type-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .type-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 16px;
+            cursor: pointer;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+
+        .type-option:hover {
+            border-color: #9ca3af;
+        }
+
+        .type-option.selected {
+            border-color: #111827;
+            background: #f3f4f6;
+        }
+
+        .type-option strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .type-option span {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .resistor-preview {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 35px 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .resistor {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+
+        .resistor-wire {
+            width: 80px;
+            height: 5px;
+            background: #777;
+        }
+
+        .resistor-body {
+            width: 280px;
+            height: 75px;
+            background: #d6b27c;
+            border: 2px solid #8d6e3f;
+            border-radius: 12px;
+            display: flex;
+            align-items: stretch;
+            justify-content: space-around;
+            padding: 0 35px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.12);
+        }
+
+        .band {
+            width: 22px;
+            height: 100%;
+            border-left: 1px solid rgba(0, 0, 0, 0.15);
+            border-right: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .band-black {
+            background: #111111;
+        }
+
+        .band-brown {
+            background: #7b3f00;
+        }
+
+        .band-red {
+            background: #d32f2f;
+        }
+
+        .band-orange {
+            background: #f57c00;
+        }
+
+        .band-yellow {
+            background: #fbc02d;
+        }
+
+        .band-green {
+            background: #388e3c;
+        }
+
+        .band-blue {
+            background: #1976d2;
+        }
+
+        .band-violet {
+            background: #7b1fa2;
+        }
+
+        .band-grey {
+            background: #757575;
+        }
+
+        .band-white {
+            background: #ffffff;
+        }
+
+        .band-gold {
+            background: #d4af37;
+        }
+
+        .band-silver {
+            background: #c0c0c0;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 16px;
+            background: #ffffff;
+            outline: none;
+        }
+
+        select:focus {
+            border-color: #111827;
+        }
+
+        .band-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .calculate-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .calculate-button:hover {
+            background: #374151;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #111827;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .reset-button:hover {
+            background: #d1d5db;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 9px;
+            background: #f3f4f6;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .result-details {
+            margin-top: 12px;
+            color: #4b5563;
+        }
+
+        .content {
+            max-width: 850px;
+        }
+
+        .content h2 {
+            margin-top: 35px;
+            margin-bottom: 12px;
+            font-size: 27px;
+        }
+
+        .content p {
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+
+        .content ul {
+            padding-left: 25px;
+            color: #4b5563;
+        }
+
+        .color-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .color-table th,
+        .color-table td {
+            border: 1px solid #e5e7eb;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .color-table th {
+            background: #f3f4f6;
+        }
+
+        .footer {
+            background: #111827;
+            color: white;
+            padding-top: 45px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+        }
+
+        .copyright {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        @media (max-width: 650px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .page-heading h1 {
+                font-size: 34px;
+            }
+
+            .calculator-box {
+                padding: 20px;
+            }
+
+            .type-options {
+                grid-template-columns: 1fr;
+            }
+
+            .band-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .resistor-body {
+                width: 220px;
+                padding: 0 20px;
+            }
+
+            .resistor-wire {
+                width: 35px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="container nav">
+
+        <a href="../index.html" class="logo">
+            Circuit Formula
+        </a>
+
+        <nav class="nav-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../index.html#categories">
+                Categories
+            </a>
+
+            <a href="../index.html#calculators">
+                Calculators
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<section class="section">
+
+<div class="container">
+
+
+    <div class="breadcrumb">
+
+        <a href="../index.html">
+            Home
+        </a>
+
+        <span>/</span>
+
+        <a href="../index.html#categories">
+            Basic Electronics
+        </a>
+
+        <span>/</span>
+
+        <span>
+            Resistor Color Code
+        </span>
+
+    </div>
+
+
+    <div class="page-heading">
+
+        <h1>
+            Resistor Color Code Calculator
+        </h1>
+
+        <p>
+            Select the color bands on your resistor to find its resistance value.
+        </p>
+
+    </div>
+
+
+    <div class="calculator-box">
+
+
+        <!-- STEP 1 -->
+
+        <div class="step">
+
+            <div class="step-number">
+                STEP 1
+            </div>
+
+            <h2>
+                How many color bands does your resistor have?
+            </h2>
+
+
+            <div class="type-options">
+
+
+                <div
+                    class="type-option selected"
+                    onclick="selectBandType(4, this)">
+
+                    <strong>
+                        4 Band
+                    </strong>
+
+                    <span>
+                        Common resistor
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="type-option"
+                    onclick="selectBandType(5, this)">
+
+                    <strong>
+                        5 Band
+                    </strong>
+
+                    <span>
+                        Precision resistor
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="type-option"
+                    onclick="selectBandType(6, this)">
+
+                    <strong>
+                        6 Band
+                    </strong>
+
+                    <span>
+                        Precision + temperature coefficient
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- RESISTOR PREVIEW -->
+
+        <div class="resistor-preview">
+
+            <div class="resistor">
+
+                <div class="resistor-wire"></div>
+
+                <div
+                    class="resistor-body"
+                    id="resistorBody">
+
+                    <div
+                        class="band band-brown"
+                        id="previewBand1">
+                    </div>
+
+                    <div
+                        class="band band-black"
+                        id="previewBand2">
+                    </div>
+
+                    <div
+                        class="band band-red"
+                        id="previewBand3">
+                    </div>
+
+                    <div
+                        class="band band-gold"
+                        id="previewBand4">
+                    </div>
+
+                    <div
+                        class="band band-brown"
+                        id="previewBand5"
+                        style="display:none;">
+                    </div>
+
+                    <div
+                        class="band band-brown"
+                        id="previewBand6"
+                        style="display:none;">
+                    </div>
+
+                </div>
+
+                <div class="resistor-wire"></div>
+
+            </div>
+
+            <p>
+                Example resistor
+            </p>
+
+        </div>
+
+
+        <!-- STEP 2 -->
+
+        <div class="step">
+
+            <div class="step-number">
+                STEP 2
+            </div>
+
+            <h2>
+                Select the resistor colors
+            </h2>
+
+
+            <div class="band-grid">
+
+
+                <div class="input-group">
+
+                    <label for="band1">
+                        Band 1
+                    </label>
+
+                    <select id="band1" onchange="updatePreview()">
+
+                        <option value="black">Black</option>
+                        <option value="brown" selected>Brown</option>
+                        <option value="red">Red</option>
+                        <option value="orange">Orange</option>
+                        <option value="yellow">Yellow</option>
+                        <option value="green">Green</option>
+                        <option value="blue">Blue</option>
+                        <option value="violet">Violet</option>
+                        <option value="grey">Grey</option>
+                        <option value="white">White</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="band2">
+                        Band 2
+                    </label>
+
+                    <select id="band2" onchange="updatePreview()">
+
+                        <option value="black" selected>Black</option>
+                        <option value="brown">Brown</option>
+                        <option value="red">Red</option>
+                        <option value="orange">Orange</option>
+                        <option value="yellow">Yellow</option>
+                        <option value="green">Green</option>
+                        <option value="blue">Blue</option>
+                        <option value="violet">Violet</option>
+                        <option value="grey">Grey</option>
+                        <option value="white">White</option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    class="input-group"
+                    id="band3Group">
+
+                    <label for="band3">
+                        Band 3
+                    </label>
+
+                    <select id="band3" onchange="updatePreview()">
+
+                        <option value="black">Black</option>
+                        <option value="brown">Brown</option>
+                        <option value="red" selected>Red</option>
+                        <option value="orange">Orange</option>
+                        <option value="yellow">Yellow</option>
+                        <option value="green">Green</option>
+                        <option value="blue">Blue</option>
+                        <option value="violet">Violet</option>
+                        <option value="grey">Grey</option>
+                        <option value="white">White</option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    class="input-group"
+                    id="band4Group">
+
+                    <label for="band4">
+                        Multiplier
+
+                    </label>
+
+                    <select id="band4" onchange="updatePreview()">
+
+                        <option value="black">Black ×1</option>
+                        <option value="brown">Brown ×10</option>
+                        <option value="red" selected>Red ×100</option>
+                        <option value="orange">Orange ×1k</option>
+                        <option value="yellow">Yellow ×10k</option>
+                        <option value="green">Green ×100k</option>
+                        <option value="blue">Blue ×1M</option>
+                        <option value="violet">Violet ×10M</option>
+                        <option value="grey">Grey ×100M</option>
+                        <option value="white">White ×1G</option>
+                        <option value="gold">Gold ×0.1</option>
+                        <option value="silver">Silver ×0.01</option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    class="input-group"
+                    id="toleranceGroup">
+
+                    <label for="tolerance">
+                        Tolerance
+                    </label>
+
+                    <select id="tolerance" onchange="updatePreview()">
+
+                        <option value="brown">Brown ±1%</option>
+                        <option value="red">Red ±2%</option>
+                        <option value="green">Green ±0.5%</option>
+                        <option value="blue">Blue ±0.25%</option>
+                        <option value="violet">Violet ±0.1%</option>
+                        <option value="grey">Grey ±0.05%</option>
+                        <option value="gold" selected>Gold ±5%</option>
+                        <option value="silver">Silver ±10%</option>
+
+                    </select>
+
+                </div>
+
+
+                <div
+                    class="input-group"
+                    id="tempGroup"
+                    style="display:none;">
+
+                    <label for="tempCoeff">
+                        Temperature Coefficient
+                    </label>
+
+                    <select id="tempCoeff" onchange="updatePreview()">
+
+                        <option value="brown">Brown 100 ppm/K</option>
+                        <option value="red">Red 50 ppm/K</option>
+                        <option value="orange">Orange 15 ppm/K</option>
+                        <option value="yellow">Yellow 25 ppm/K</option>
+                        <option value="blue">Blue 10 ppm/K</option>
+                        <option value="violet">Violet 5 ppm/K</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="calculate-button"
+                onclick="calculate()">
+
+                Calculate Resistance
+
+            </button>
+
+
+            <button
+                class="reset-button"
+                onclick="resetCalculator()">
+
+                Reset
+
+            </button>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div
+            class="result"
+            id="result">
+
+            <div class="result-title">
+                Resistance
+            </div>
+
+            <div
+                class="result-value"
+                id="resultValue">
+            </div>
+
+            <div
+                class="result-details"
+                id="resultDetails">
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- INFORMATION -->
+
+    <article class="content">
+
+
+        <h2>
+            How to Read a Resistor Color Code
+        </h2>
+
+        <p>
+            Resistors use colored bands to represent their resistance,
+            multiplier and tolerance.
+        </p>
+
+        <p>
+            For a 4 band resistor, the first two bands represent
+            the significant digits. The third band represents the
+            multiplier. The fourth band represents tolerance.
+        </p>
+
+
+        <h2>
+            Resistor Color Code Table
+        </h2>
+
+
+        <table class="color-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Color
+                    </th>
+
+                    <th>
+                        Digit
+                    </th>
+
+                    <th>
+                        Multiplier
+                    </th>
+
+                    <th>
+                        Tolerance
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>Black</td>
+                    <td>0</td>
+                    <td>×1</td>
+                    <td>None</td>
+                </tr>
+
+                <tr>
+                    <td>Brown</td>
+                    <td>1</td>
+                    <td>×10</td>
+                    <td>±1%</td>
+                </tr>
+
+                <tr>
+                    <td>Red</td>
+                    <td>2</td>
+                    <td>×100</td>
+                    <td>±2%</td>
+                </tr>
+
+                <tr>
+                    <td>Orange</td>
+                    <td>3</td>
+                    <td>×1,000</td>
+                    <td>None</td>
+                </tr>
+
+                <tr>
+                    <td>Yellow</td>
+                    <td>4</td>
+                    <td>×10,000</td>
+                    <td>None</td>
+                </tr>
+
+                <tr>
+                    <td>Green</td>
+                    <td>5</td>
+                    <td>×100,000</td>
+                    <td>±0.5%</td>
+                </tr>
+
+                <tr>
+                    <td>Blue</td>
+                    <td>6</td>
+                    <td>×1,000,000</td>
+                    <td>±0.25%</td>
+                </tr>
+
+                <tr>
+                    <td>Violet</td>
+                    <td>7</td>
+                    <td>×10,000,000</td>
+                    <td>±0.1%</td>
+                </tr>
+
+                <tr>
+                    <td>Grey</td>
+                    <td>8</td>
+                    <td>×100,000,000</td>
+                    <td>±0.05%</td>
+                </tr>
+
+                <tr>
+                    <td>White</td>
+                    <td>9</td>
+                    <td>×1,000,000,000</td>
+                    <td>None</td>
+                </tr>
+
+                <tr>
+                    <td>Gold</td>
+                    <td>None</td>
+                    <td>×0.1</td>
+                    <td>±5%</td>
+                </tr>
+
+                <tr>
+                    <td>Silver</td>
+                    <td>None</td>
+                    <td>×0.01</td>
+                    <td>±10%</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+
+        <h2>
+            Example
+        </h2>
+
+        <p>
+            Consider a 4 band resistor with these colors:
+        </p>
+
+        <p>
+            Brown, Black, Red, Gold
+        </p>
+
+        <p>
+            Brown = 1
+        </p>
+
+        <p>
+            Black = 0
+        </p>
+
+        <p>
+            Red = ×100
+        </p>
+
+        <p>
+            Gold = ±5%
+        </p>
+
+        <p>
+            Therefore:
+        </p>
+
+        <p>
+            10 × 100 = 1000 Ω
+        </p>
+
+        <p>
+            The resistor value is 1 kΩ ±5%.
+        </p>
+
+
+    </article>
+
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div>
+
+            <div class="logo">
+                Circuit Formula
+            </div>
+
+            <p>
+                Electronics calculators for circuit design,
+                embedded systems, RF, PCB and power electronics.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../about.html">
+                About
+            </a>
+
+            <a href="../contact.html">
+                Contact
+            </a>
+
+            <a href="../privacy.html">
+                Privacy
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 Circuit Formula. All rights reserved.
+
+    </div>
+
+</footer>
+
+
+<script>
+
+let bandCount = 4;
+
+
+const digitValues = {
+
+    black: 0,
+    brown: 1,
+    red: 2,
+    orange: 3,
+    yellow: 4,
+    green: 5,
+    blue: 6,
+    violet: 7,
+    grey: 8,
+    white: 9
+
+};
+
+
+const multipliers = {
+
+    black: 1,
+    brown: 10,
+    red: 100,
+    orange: 1000,
+    yellow: 10000,
+    green: 100000,
+    blue: 1000000,
+    violet: 10000000,
+    grey: 100000000,
+    white: 1000000000,
+    gold: 0.1,
+    silver: 0.01
+
+};
+
+
+const tolerances = {
+
+    brown: 1,
+    red: 2,
+    green: 0.5,
+    blue: 0.25,
+    violet: 0.1,
+    grey: 0.05,
+    gold: 5,
+    silver: 10
+
+};
+
+
+const tempCoefficients = {
+
+    brown: 100,
+    red: 50,
+    orange: 15,
+    yellow: 25,
+    blue: 10,
+    violet: 5
+
+};
+
+
+function selectBandType(count, element) {
+
+    bandCount = count;
+
+
+    document
+        .querySelectorAll(".type-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    element.classList.add("selected");
+
+
+    if (count === 4) {
+
+        document.getElementById("band3Group").style.display = "block";
+
+        document.getElementById("band4Group")
+            .querySelector("label").textContent =
+            "Multiplier";
+
+        document.getElementById("toleranceGroup").style.display = "block";
+
+        document.getElementById("tempGroup").style.display = "none";
+
+
+        document.getElementById("previewBand1").style.display = "block";
+        document.getElementById("previewBand2").style.display = "block";
+        document.getElementById("previewBand3").style.display = "block";
+        document.getElementById("previewBand4").style.display = "block";
+        document.getElementById("previewBand5").style.display = "none";
+        document.getElementById("previewBand6").style.display = "none";
+
+    }
+
+
+    if (count === 5) {
+
+        document.getElementById("band3Group").style.display = "block";
+
+        document.getElementById("band4Group")
+            .querySelector("label").textContent =
+            "Multiplier";
+
+        document.getElementById("toleranceGroup").style.display = "block";
+
+        document.getElementById("tempGroup").style.display = "none";
+
+
+        document.getElementById("previewBand1").style.display = "block";
+        document.getElementById("previewBand2").style.display = "block";
+        document.getElementById("previewBand3").style.display = "block";
+        document.getElementById("previewBand4").style.display = "block";
+        document.getElementById("previewBand5").style.display = "block";
+        document.getElementById("previewBand6").style.display = "none";
+
+    }
+
+
+    if (count === 6) {
+
+        document.getElementById("band3Group").style.display = "block";
+
+        document.getElementById("band4Group")
+            .querySelector("label").textContent =
+            "Multiplier";
+
+        document.getElementById("toleranceGroup").style.display = "block";
+
+        document.getElementById("tempGroup").style.display = "block";
+
+
+        document.getElementById("previewBand1").style.display = "block";
+        document.getElementById("previewBand2").style.display = "block";
+        document.getElementById("previewBand3").style.display = "block";
+        document.getElementById("previewBand4").style.display = "block";
+        document.getElementById("previewBand5").style.display = "block";
+        document.getElementById("previewBand6").style.display = "block";
+
+    }
+
+
+    updatePreview();
+
+}
+
+
+function updatePreview() {
+
+    const colors = [
+
+        document.getElementById("band1").value,
+        document.getElementById("band2").value,
+        document.getElementById("band3").value,
+        document.getElementById("band4").value,
+        document.getElementById("tolerance").value,
+        document.getElementById("tempCoeff").value
+
+    ];
+
+
+    const previewIds = [
+
+        "previewBand1",
+        "previewBand2",
+        "previewBand3",
+        "previewBand4",
+        "previewBand5",
+        "previewBand6"
+
+    ];
+
+
+    colors.forEach(function(color, index) {
+
+        const band =
+            document.getElementById(
+                previewIds[index]
+            );
+
+
+        if (band) {
+
+            band.className =
+                "band band-" + color;
+
+        }
+
+    });
+
+}
+
+
+function calculate() {
+
+    let value;
+
+
+    if (bandCount === 4) {
+
+        const first =
+            digitValues[
+                document.getElementById("band1").value
+            ];
+
+        const second =
+            digitValues[
+                document.getElementById("band2").value
+            ];
+
+        const multiplier =
+            multipliers[
+                document.getElementById("band4").value
+            ];
+
+
+        value =
+            ((first * 10) + second) * multiplier;
+
+    }
+
+
+    else if (bandCount === 5) {
+
+        const first =
+            digitValues[
+                document.getElementById("band1").value
+            ];
+
+        const second =
+            digitValues[
+                document.getElementById("band2").value
+            ];
+
+        const third =
+            digitValues[
+                document.getElementById("band3").value
+            ];
+
+        const multiplier =
+            multipliers[
+                document.getElementById("band4").value
+            ];
+
+
+        value =
+            ((first * 100) +
+            (second * 10) +
+            third) * multiplier;
+
+    }
+
+
+    else {
+
+        const first =
+            digitValues[
+                document.getElementById("band1").value
+            ];
+
+        const second =
+            digitValues[
+                document.getElementById("band2").value
+            ];
+
+        const third =
+            digitValues[
+                document.getElementById("band3").value
+            ];
+
+        const multiplier =
+            multipliers[
+                document.getElementById("band4").value
+            ];
+
+
+        value =
+            ((first * 100) +
+            (second * 10) +
+            third) * multiplier;
+
+    }
+
+
+    const toleranceColor =
+        document.getElementById("tolerance").value;
+
+
+    const tolerance =
+        tolerances[toleranceColor];
+
+
+    let details =
+        "Tolerance: ±" +
+        tolerance +
+        "%";
+
+
+    if (bandCount === 6) {
+
+        const tempColor =
+            document.getElementById("tempCoeff").value;
+
+
+        const temp =
+            tempCoefficients[tempColor];
+
+
+        details +=
+            "<br>Temperature coefficient: " +
+            temp +
+            " ppm/K";
+
+    }
+
+
+    document.getElementById("resultValue").textContent =
+        formatResistance(value);
+
+
+    document.getElementById("resultDetails").innerHTML =
+        details;
+
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function formatResistance(value) {
+
+    if (value >= 1000000000) {
+
+        return (
+            Number((value / 1000000000).toFixed(4))
+            + " GΩ"
+        );
+
+    }
+
+
+    if (value >= 1000000) {
+
+        return (
+            Number((value / 1000000).toFixed(4))
+            + " MΩ"
+        );
+
+    }
+
+
+    if (value >= 1000) {
+
+        return (
+            Number((value / 1000).toFixed(4))
+            + " kΩ"
+        );
+
+    }
+
+
+    if (value < 1) {
+
+        return (
+            Number(value.toFixed(6))
+            + " Ω"
+        );
+
+    }
+
+
+    return (
+        Number(value.toFixed(4))
+        + " Ω"
+    );
+
+}
+
+
+function resetCalculator() {
+
+    bandCount = 4;
+
+
+    document.getElementById("band1").value = "brown";
+
+    document.getElementById("band2").value = "black";
+
+    document.getElementById("band3").value = "red";
+
+    document.getElementById("band4").value = "red";
+
+    document.getElementById("tolerance").value = "gold";
+
+    document.getElementById("tempCoeff").value = "brown";
+
+
+    document
+        .querySelectorAll(".type-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    document
+        .querySelector(".type-option")
+        .classList.add("selected");
+
+
+    document.getElementById("band3Group").style.display = "block";
+
+    document.getElementById("band4Group")
+        .querySelector("label").textContent =
+        "Multiplier";
+
+    document.getElementById("toleranceGroup").style.display = "block";
+
+    document.getElementById("tempGroup").style.display = "none";
+
+
+    document.getElementById("previewBand1").style.display = "block";
+    document.getElementById("previewBand2").style.display = "block";
+    document.getElementById("previewBand3").style.display = "block";
+    document.getElementById("previewBand4").style.display = "block";
+    document.getElementById("previewBand5").style.display = "none";
+    document.getElementById("previewBand6").style.display = "none";
+
+
+    updatePreview();
+
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+
+}
+
+</script>
+
+
+</body>
+
+</html>

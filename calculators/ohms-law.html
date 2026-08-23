@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ohm's Law Calculator | Circuit Formula</title>
+
+    <meta name="description"
+          content="Easy Ohm's Law calculator. Calculate voltage, current, resistance or power with Circuit Formula.">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f8fa;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+
+        /* HEADER */
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+
+        /* MAIN */
+
+        .section {
+            padding: 60px 0 80px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .page-heading {
+            margin-bottom: 35px;
+        }
+
+        .page-heading h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+
+        /* CALCULATOR */
+
+        .calculator-box {
+            max-width: 650px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 60px;
+        }
+
+
+        /* STEP */
+
+        .step {
+            margin-bottom: 30px;
+        }
+
+        .step-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .step h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+
+        /* CALCULATION OPTIONS */
+
+        .calculation-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .calculation-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 16px;
+            cursor: pointer;
+            background: white;
+            transition: 0.2s;
+        }
+
+        .calculation-option:hover {
+            border-color: #9ca3af;
+        }
+
+        .calculation-option.selected {
+            border-color: #111827;
+            background: #f3f4f6;
+        }
+
+        .calculation-option strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .calculation-option span {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+
+        /* INPUTS */
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-row input {
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-row input:focus {
+            border-color: #111827;
+        }
+
+        .unit {
+            width: 35px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+
+        /* CALCULATE BUTTON */
+
+        .calculate-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .calculate-button:hover {
+            background: #374151;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #111827;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+
+        /* RESULT */
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 9px;
+            background: #f3f4f6;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .result-formula {
+            margin-top: 10px;
+            color: #6b7280;
+        }
+
+
+        /* INFORMATION */
+
+        .content {
+            max-width: 800px;
+        }
+
+        .content h2 {
+            margin-top: 35px;
+            margin-bottom: 12px;
+        }
+
+        .content p {
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+
+        .formula {
+            display: inline-block;
+            padding: 14px 20px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-weight: 700;
+            margin: 10px 0 20px;
+        }
+
+
+        /* FOOTER */
+
+        .footer {
+            background: #111827;
+            color: white;
+            padding-top: 45px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+        }
+
+        .copyright {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 650px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .page-heading h1 {
+                font-size: 34px;
+            }
+
+            .calculator-box {
+                padding: 20px;
+            }
+
+            .calculation-options {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="container nav">
+
+        <a href="../index.html" class="logo">
+            Circuit Formula
+        </a>
+
+        <nav class="nav-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../index.html#categories">
+                Categories
+            </a>
+
+            <a href="../index.html#calculators">
+                Calculators
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<section class="section">
+
+<div class="container">
+
+
+    <div class="breadcrumb">
+
+        <a href="../index.html">
+            Home
+        </a>
+
+        <span>/</span>
+
+        <span>Basic Electronics</span>
+
+        <span>/</span>
+
+        <span>Ohm's Law</span>
+
+    </div>
+
+
+    <div class="page-heading">
+
+        <h1>
+            Ohm's Law Calculator
+        </h1>
+
+        <p>
+            Choose what you want to calculate and enter the values you know.
+        </p>
+
+    </div>
+
+
+    <div class="calculator-box">
+
+
+        <!-- STEP 1 -->
+
+        <div class="step">
+
+            <div class="step-number">
+                STEP 1
+            </div>
+
+            <h2>
+                What do you want to calculate?
+            </h2>
+
+
+            <div class="calculation-options">
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('voltage', this)">
+
+                    <strong>
+                        Voltage
+                    </strong>
+
+                    <span>
+                        Calculate V
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('current', this)">
+
+                    <strong>
+                        Current
+                    </strong>
+
+                    <span>
+                        Calculate I
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('resistance', this)">
+
+                    <strong>
+                        Resistance
+                    </strong>
+
+                    <span>
+                        Calculate R
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('power', this)">
+
+                    <strong>
+                        Power
+                    </strong>
+
+                    <span>
+                        Calculate P
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- STEP 2 -->
+
+        <div
+            class="step"
+            id="inputsSection"
+            style="display:none;">
+
+            <div class="step-number">
+                STEP 2
+            </div>
+
+            <h2>
+                Enter the values you know
+            </h2>
+
+
+            <!-- VOLTAGE -->
+
+            <div
+                class="input-group"
+                id="voltageGroup">
+
+                <label for="voltage">
+                    Voltage
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="voltage"
+                        placeholder="Enter voltage"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        V
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- CURRENT -->
+
+            <div
+                class="input-group"
+                id="currentGroup">
+
+                <label for="current">
+                    Current
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="current"
+                        placeholder="Enter current"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        A
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- RESISTANCE -->
+
+            <div
+                class="input-group"
+                id="resistanceGroup">
+
+                <label for="resistance">
+                    Resistance
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="resistance"
+                        placeholder="Enter resistance"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        Ω
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="calculate-button"
+                onclick="calculate()">
+
+                Calculate
+
+            </button>
+
+
+            <button
+                class="reset-button"
+                onclick="resetCalculator()">
+
+                Reset
+
+            </button>
+
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div
+            id="result"
+            class="result">
+
+            <div class="result-title">
+                Result
+            </div>
+
+            <div
+                id="resultValue"
+                class="result-value">
+            </div>
+
+            <div
+                id="resultFormula"
+                class="result-formula">
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- INFORMATION -->
+
+    <article class="content">
+
+        <h2>
+            What is Ohm's Law?
+        </h2>
+
+        <p>
+            Ohm's Law describes the relationship between
+            voltage, current and resistance in an electrical circuit.
+        </p>
+
+
+        <div class="formula">
+            V = I × R
+        </div>
+
+
+        <h2>
+            Ohm's Law Formulas
+        </h2>
+
+        <p>
+            Voltage:
+        </p>
+
+        <div class="formula">
+            V = I × R
+        </div>
+
+
+        <p>
+            Current:
+        </p>
+
+        <div class="formula">
+            I = V ÷ R
+        </div>
+
+
+        <p>
+            Resistance:
+        </p>
+
+        <div class="formula">
+            R = V ÷ I
+        </div>
+
+
+        <p>
+            Power:
+        </p>
+
+        <div class="formula">
+            P = V × I
+        </div>
+
+
+        <h2>
+            Example
+        </h2>
+
+        <p>
+            Suppose you have a 12 V power supply
+            connected to a 6 Ω resistor.
+        </p>
+
+        <div class="formula">
+            I = 12 ÷ 6 = 2 A
+        </div>
+
+        <p>
+            The current through the resistor is 2 A.
+        </p>
+
+    </article>
+
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div>
+
+            <div class="logo">
+                Circuit Formula
+            </div>
+
+            <p>
+                Electronics calculators for circuit design,
+                embedded systems, RF, PCB and power electronics.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../about.html">
+                About
+            </a>
+
+            <a href="../contact.html">
+                Contact
+            </a>
+
+            <a href="../privacy.html">
+                Privacy
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 Circuit Formula. All rights reserved.
+
+    </div>
+
+</footer>
+
+
+<script>
+
+let selectedCalculation = "";
+
+
+function selectCalculation(type, element) {
+
+    selectedCalculation = type;
+
+
+    document
+        .querySelectorAll(".calculation-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    element.classList.add("selected");
+
+
+    document.getElementById("inputsSection").style.display = "block";
+
+
+    hideAllInputs();
+
+
+    if (type === "voltage") {
+
+        showInput("currentGroup");
+        showInput("resistanceGroup");
+
+    }
+
+
+    else if (type === "current") {
+
+        showInput("voltageGroup");
+        showInput("resistanceGroup");
+
+    }
+
+
+    else if (type === "resistance") {
+
+        showInput("voltageGroup");
+        showInput("currentGroup");
+
+    }
+
+
+    else if (type === "power") {
+
+        showInput("voltageGroup");
+        showInput("currentGroup");
+
+    }
+
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+
+}
+
+
+function hideAllInputs() {
+
+    document.getElementById("voltageGroup").style.display = "none";
+
+    document.getElementById("currentGroup").style.display = "none";
+
+    document.getElementById("resistanceGroup").style.display = "none";
+
+}
+
+
+function showInput(id) {
+
+    document.getElementById(id).style.display = "block";
+
+}
+
+
+function calculate() {
+
+    const V =
+        parseFloat(
+            document.getElementById("voltage").value
+        );
+
+    const I =
+        parseFloat(
+            document.getElementById("current").value
+        );
+
+    const R =
+        parseFloat(
+            document.getElementById("resistance").value
+        );
+
+
+    let answer;
+
+    let unit;
+
+    let formula;
+
+
+    if (selectedCalculation === "voltage") {
+
+        if (isNaN(I) || isNaN(R)) {
+
+            showError(
+                "Please enter current and resistance."
+            );
+
+            return;
+        }
+
+
+        if (R === 0) {
+
+            showError(
+                "Resistance cannot be zero."
+            );
+
+            return;
+        }
+
+
+        answer = I * R;
+
+        unit = "V";
+
+        formula =
+            "V = I × R = " +
+            formatNumber(I) +
+            " × " +
+            formatNumber(R);
+
+
+    }
+
+
+    else if (selectedCalculation === "current") {
+
+        if (isNaN(V) || isNaN(R)) {
+
+            showError(
+                "Please enter voltage and resistance."
+            );
+
+            return;
+        }
+
+
+        if (R === 0) {
+
+            showError(
+                "Resistance cannot be zero."
+            );
+
+            return;
+        }
+
+
+        answer = V / R;
+
+        unit = "A";
+
+        formula =
+            "I = V ÷ R = " +
+            formatNumber(V) +
+            " ÷ " +
+            formatNumber(R);
+
+    }
+
+
+    else if (selectedCalculation === "resistance") {
+
+        if (isNaN(V) || isNaN(I)) {
+
+            showError(
+                "Please enter voltage and current."
+            );
+
+            return;
+        }
+
+
+        if (I === 0) {
+
+            showError(
+                "Current cannot be zero."
+            );
+
+            return;
+        }
+
+
+        answer = V / I;
+
+        unit = "Ω";
+
+        formula =
+            "R = V ÷ I = " +
+            formatNumber(V) +
+            " ÷ " +
+            formatNumber(I);
+
+    }
+
+
+    else if (selectedCalculation === "power") {
+
+        if (isNaN(V) || isNaN(I)) {
+
+            showError(
+                "Please enter voltage and current."
+            );
+
+            return;
+        }
+
+
+        answer = V * I;
+
+        unit = "W";
+
+        formula =
+            "P = V × I = " +
+            formatNumber(V) +
+            " × " +
+            formatNumber(I);
+
+    }
+
+
+    else {
+
+        showError(
+            "Please select what you want to calculate."
+        );
+
+        return;
+    }
+
+
+    document.getElementById("resultValue").textContent =
+        formatNumber(answer) + " " + unit;
+
+
+    document.getElementById("resultFormula").textContent =
+        formula;
+
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function showError(message) {
+
+    document.getElementById("resultValue").textContent =
+        "Check your input";
+
+    document.getElementById("resultFormula").textContent =
+        message;
+
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function formatNumber(value) {
+
+    if (!Number.isFinite(value)) {
+        return "Invalid";
+    }
+
+
+    if (
+        Math.abs(value) >= 1000000 ||
+        (
+            Math.abs(value) > 0 &&
+            Math.abs(value) < 0.000001
+        )
+    ) {
+
+        return value.toExponential(4);
+
+    }
+
+
+    return Number(
+        value.toFixed(6)
+    ).toString();
+
+}
+
+
+function resetCalculator() {
+
+    selectedCalculation = "";
+
+
+    document.getElementById("voltage").value = "";
+
+    document.getElementById("current").value = "";
+
+    document.getElementById("resistance").value = "";
+
+
+    hideAllInputs();
+
+
+    document.getElementById("inputsSection").style.display = "none";
+
+
+    document
+        .querySelectorAll(".calculation-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+
+}
+
+</script>
+
+
+</body>
+
+</html>

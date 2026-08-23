@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dBm to Watt Calculator | Circuit Formula</title>
+    <meta name="description" content="Convert dBm to watts, milliwatts, dBW and convert watts to dBm for RF and electronics calculations.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f8fa;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+        /* HEADER */
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #111827;
+        }
+
+        /* MAIN */
+        .section {
+            padding: 60px 0 80px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .breadcrumb a:hover {
+            color: #111827;
+            text-decoration: underline;
+        }
+
+        .page-heading {
+            margin-bottom: 35px;
+        }
+
+        .page-heading h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+        /* CALCULATOR */
+        .calculator-box {
+            max-width: 850px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 60px;
+        }
+
+        .step {
+            margin-bottom: 30px;
+        }
+
+        .step-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .step h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        /* OPTIONS */
+        .calculation-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .calculation-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 16px;
+            cursor: pointer;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+
+        .calculation-option:hover {
+            border-color: #9ca3af;
+        }
+
+        .calculation-option.selected {
+            border-color: #111827;
+            background: #f3f4f6;
+        }
+
+        .calculation-option strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .calculation-option span {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        /* RF DIAGRAM */
+        .rf-diagram {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .diagram-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .power-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .power-box {
+            padding: 18px 25px;
+            background: #ffffff;
+            border: 2px solid #374151;
+            border-radius: 8px;
+            font-weight: 700;
+            min-width: 130px;
+        }
+
+        .power-box.dbm {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .power-box.watt {
+            border-color: #059669;
+            color: #059669;
+        }
+
+        .arrow {
+            font-size: 25px;
+            color: #6b7280;
+        }
+
+        /* INPUTS */
+        .input-group {
+            margin-bottom: 20px;
+            transition: opacity 0.2s ease;
+        }
+
+        .input-group.hidden {
+            display: none;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .input-help {
+            display: block;
+            margin-top: 5px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-row input,
+        .input-row select {
+            width: 100%;
+            flex: 1;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 16px;
+            outline: none;
+            background: #ffffff;
+        }
+
+        .input-row input:focus,
+        .input-row select:focus {
+            border-color: #111827;
+        }
+
+        .unit {
+            min-width: 60px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        /* BUTTONS */
+        .calculate-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .calculate-button:hover {
+            background: #374151;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #111827;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .reset-button:hover {
+            background: #d1d5db;
+        }
+
+        /* RESULT */
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 9px;
+            background: #f3f4f6;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .result-details {
+            margin-top: 12px;
+            color: #4b5563;
+        }
+
+        /* CONTENT */
+        .content {
+            max-width: 850px;
+        }
+
+        .content h2 {
+            margin-top: 35px;
+            margin-bottom: 12px;
+            font-size: 27px;
+        }
+
+        .content p {
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+
+        .content ul {
+            padding-left: 25px;
+            color: #4b5563;
+        }
+
+        .formula {
+            display: inline-block;
+            padding: 14px 20px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-weight: 700;
+            margin: 10px 0 20px;
+        }
+
+        .example-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 25px;
+        }
+
+        .example-table th,
+        .example-table td {
+            padding: 11px;
+            border: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        .example-table th {
+            background: #f3f4f6;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #111827;
+            color: white;
+            padding-top: 45px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+        }
+
+        .copyright {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 650px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-heading h1 {
+                font-size: 34px;
+            }
+
+            .calculator-box {
+                padding: 20px;
+            }
+
+            .calculation-options {
+                grid-template-columns: 1fr;
+            }
+
+            .power-flow {
+                flex-direction: column;
+            }
+
+            .arrow {
+                transform: rotate(90deg);
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="container nav">
+        <a href="../index.html" class="logo">Circuit Formula</a>
+        <nav class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../index.html#categories">Categories</a>
+            <a href="../index.html#calculators">Calculators</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+<section class="section">
+<div class="container">
+
+    <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="../index.html#categories">RF Electronics</a>
+        <span>/</span>
+        <span>dBm to Watt</span>
+    </div>
+
+    <div class="page-heading">
+        <h1>dBm to Watt Calculator</h1>
+        <p>Convert RF power between dBm, watts, milliwatts and dBW.</p>
+    </div>
+
+    <div class="calculator-box">
+
+        <div class="rf-diagram">
+            <div class="diagram-title">RF Power Conversion</div>
+            <div class="power-flow">
+                <div class="power-box dbm">dBm</div>
+                <div class="arrow">⇄</div>
+                <div class="power-box watt">Watts / mW</div>
+            </div>
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="step">
+            <div class="step-number">STEP 1</div>
+            <h2>What do you want to calculate?</h2>
+
+            <div class="calculation-options">
+                <div class="calculation-option selected" onclick="selectCalculation('watt', this)">
+                    <strong>dBm → Watt</strong>
+                    <span>Convert RF power from dBm to watts</span>
+                </div>
+
+                <div class="calculation-option" onclick="selectCalculation('dbm', this)">
+                    <strong>Linear Power → dBm</strong>
+                    <span>Convert power from watts/mW to dBm</span>
+                </div>
+
+                <div class="calculation-option" onclick="selectCalculation('mw', this)">
+                    <strong>dBm → mW</strong>
+                    <span>Convert dBm to milliwatts</span>
+                </div>
+
+                <div class="calculation-option" onclick="selectCalculation('dbw', this)">
+                    <strong>dBm / Watt → dBW</strong>
+                    <span>Convert power to decibel-watts (dBW)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step">
+            <div class="step-number">STEP 2</div>
+            <h2>Enter the value</h2>
+
+            <!-- DBM INPUT -->
+            <div class="input-group" id="dbmInputGroup">
+                <label for="dbm">Power in dBm</label>
+                <div class="input-row">
+                    <input type="number" id="dbm" placeholder="Example: 20" step="any">
+                    <span class="unit">dBm</span>
+                </div>
+                <span class="input-help">0 dBm = 1 mW. Standard values range from -120 dBm (RX sensitivity) to +40 dBm (high power).</span>
+            </div>
+
+            <!-- WATT / LINEAR INPUT -->
+            <div class="input-group hidden" id="wattInputGroup">
+                <label for="watt">Linear Power Value</label>
+                <div class="input-row">
+                    <input type="number" id="watt" placeholder="Example: 100" step="any" min="0">
+                    <select id="powerUnit">
+                        <option value="1">W (Watts)</option>
+                        <option value="0.001" selected>mW (milliwatts)</option>
+                        <option value="0.000001">µW (microwatts)</option>
+                        <option value="0.000000001">nW (nanowatts)</option>
+                    </select>
+                </div>
+                <span class="input-help">Enter a positive physical power value.</span>
+            </div>
+
+            <button class="calculate-button" onclick="calculate()">Calculate</button>
+            <button class="reset-button" onclick="resetCalculator()">Reset</button>
+        </div>
+
+        <!-- RESULT -->
+        <div id="result" class="result">
+            <div class="result-title">Result</div>
+            <div id="resultValue" class="result-value"></div>
+            <div id="resultDetails" class="result-details"></div>
+        </div>
+
+    </div>
+
+    <article class="content">
+        <h2>What is dBm?</h2>
+        <p>dBm is a logarithmic power ratio unit referenced to 1 milliwatt (mW). It is the industry standard for expressing RF signal levels, wireless link budgets, transmit powers, and receiver sensitivities.</p>
+
+        <h2>dBm to Watt Formula</h2>
+        <div class="formula">P(W) = 10<sup>(P(dBm) / 10)</sup> × 0.001 = 10<sup>((P(dBm) - 30) / 10)</sup></div>
+
+        <h2>Watt to dBm Formula</h2>
+        <div class="formula">P(dBm) = 10 × log₁₀(P(W) / 0.001) = 10 × log₁₀(P(W)) + 30</div>
+
+        <h2>dBW Relationship</h2>
+        <div class="formula">P(dBW) = P(dBm) - 30</div>
+
+        <h2>Common RF Power Reference Table</h2>
+        <table class="example-table">
+            <thead>
+                <tr>
+                    <th>dBm</th>
+                    <th>mW</th>
+                    <th>Watts</th>
+                    <th>Common Typical Application</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>-100 dBm</td>
+                    <td>0.0000001 mW</td>
+                    <td>0.1 pW</td>
+                    <td>Wi-Fi / BLE minimum receiver sensitivity</td>
+                </tr>
+                <tr>
+                    <td>-30 dBm</td>
+                    <td>0.001 mW</td>
+                    <td>1 µW</td>
+                    <td>Strong received signal indicator (RSSI)</td>
+                </tr>
+                <tr>
+                    <td>0 dBm</td>
+                    <td>1 mW</td>
+                    <td>0.001 W</td>
+                    <td>Standard 1 mW reference point (BLE default TX)</td>
+                </tr>
+                <tr>
+                    <td>14 dBm</td>
+                    <td>25 mW</td>
+                    <td>0.025 W</td>
+                    <td>LoRa / Sub-1GHz standard transmit power (EU)</td>
+                </tr>
+                <tr>
+                    <td>20 dBm</td>
+                    <td>100 mW</td>
+                    <td>0.1 W</td>
+                    <td>Standard Wi-Fi 2.4 GHz max EIRP (ETSI)</td>
+                </tr>
+                <tr>
+                    <td>30 dBm</td>
+                    <td>1,000 mW</td>
+                    <td>1 W</td>
+                    <td>1 Watt RF Power Amplifier</td>
+                </tr>
+                <tr>
+                    <td>33 dBm</td>
+                    <td>2,000 mW</td>
+                    <td>2 W</td>
+                    <td>GSM 900 MHz mobile phone burst transmit power</td>
+                </tr>
+                <tr>
+                    <td>40 dBm</td>
+                    <td>10,000 mW</td>
+                    <td>10 W</td>
+                    <td>Cellular small cell base station transmitter</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Where dBm is Used</h2>
+        <ul>
+            <li>RF Transceivers (e.g., CC1101, SX1276, ESP32 Wi-Fi/BLE)</li>
+            <li>Antenna link budget calculations and path loss modeling</li>
+            <li>Spectrum analyzers and RF power meters</li>
+            <li>Low Noise Amplifiers (LNA) and Power Amplifiers (PA)</li>
+        </ul>
+    </article>
+
+</div>
+</section>
+</main>
+
+<footer class="footer">
+    <div class="container footer-content">
+        <div>
+            <div class="logo">Circuit Formula</div>
+            <p>Electronics calculators for circuit design, embedded systems, RF, PCB and power electronics.</p>
+        </div>
+        <div class="footer-links">
+            <a href="../index.html">Home</a>
+            <a href="../about.html">About</a>
+            <a href="../contact.html">Contact</a>
+            <a href="../privacy.html">Privacy</a>
+        </div>
+    </div>
+    <div class="copyright">© 2026 Circuit Formula. All rights reserved.</div>
+</footer>
+
+<script>
+let selectedCalculation = "watt";
+
+function updateFormVisibility() {
+    const dbmGroup = document.getElementById("dbmInputGroup");
+    const wattGroup = document.getElementById("wattInputGroup");
+
+    if (selectedCalculation === "watt" || selectedCalculation === "mw") {
+        dbmGroup.classList.remove("hidden");
+        wattGroup.classList.add("hidden");
+    } else if (selectedCalculation === "dbm" || selectedCalculation === "dbw") {
+        dbmGroup.classList.add("hidden");
+        wattGroup.classList.remove("hidden");
+    }
+}
+
+function selectCalculation(type, element) {
+    selectedCalculation = type;
+
+    document.querySelectorAll(".calculation-option").forEach(function(option) {
+        option.classList.remove("selected");
+    });
+
+    element.classList.add("selected");
+    document.getElementById("result").classList.remove("show");
+    updateFormVisibility();
+}
+
+function getLinearPowerWatts() {
+    const rawVal = parseFloat(document.getElementById("watt").value);
+    const unitScale = parseFloat(document.getElementById("powerUnit").value);
+    if (!Number.isFinite(rawVal) || rawVal <= 0) return NaN;
+    return rawVal * unitScale;
+}
+
+function calculate() {
+    const dbmInput = parseFloat(document.getElementById("dbm").value);
+    const linearWatts = getLinearPowerWatts();
+
+    let resultPrimary = "";
+    let details = "";
+
+    /* MODE 1: dBm -> Watts */
+    if (selectedCalculation === "watt") {
+        if (!Number.isFinite(dbmInput)) {
+            showError("Please enter a valid numeric value for dBm.");
+            return;
+        }
+
+        const watts = Math.pow(10, (dbmInput - 30) / 10);
+        const mw = Math.pow(10, dbmInput / 10);
+        const dbw = dbmInput - 30;
+
+        resultPrimary = formatPowerWatts(watts);
+
+        details = "<strong>Formula:</strong> P(W) = 10^((dBm - 30) / 10)" +
+                  "<br><br>" +
+                  "<strong>Input:</strong> " + dbmInput + " dBm<br>" +
+                  "<strong>In Milliwatts (mW):</strong> " + formatMilliwatts(mw) + "<br>" +
+                  "<strong>In dBW:</strong> " + dbw.toFixed(4) + " dBW";
+
+        showResult(resultPrimary, details);
+        return;
+    }
+
+    /* MODE 2: Linear Power -> dBm */
+    if (selectedCalculation === "dbm") {
+        if (!Number.isFinite(linearWatts) || linearWatts <= 0) {
+            showError("Please enter a positive power value greater than 0.");
+            return;
+        }
+
+        const dbm = 10 * Math.log10(linearWatts / 0.001);
+        const dbw = 10 * Math.log10(linearWatts);
+
+        resultPrimary = dbm.toFixed(4) + " dBm";
+
+        details = "<strong>Formula:</strong> P(dBm) = 10 × log₁₀(P(W) / 0.001)" +
+                  "<br><br>" +
+                  "<strong>Input Power:</strong> " + formatPowerWatts(linearWatts) + "<br>" +
+                  "<strong>Equivalent in mW:</strong> " + formatMilliwatts(linearWatts * 1000) + "<br>" +
+                  "<strong>In dBW:</strong> " + dbw.toFixed(4) + " dBW";
+
+        showResult(resultPrimary, details);
+        return;
+    }
+
+    /* MODE 3: dBm -> mW */
+    if (selectedCalculation === "mw") {
+        if (!Number.isFinite(dbmInput)) {
+            showError("Please enter a valid numeric value for dBm.");
+            return;
+        }
+
+        const mw = Math.pow(10, dbmInput / 10);
+        const watts = mw / 1000;
+
+        resultPrimary = formatMilliwatts(mw);
+
+        details = "<strong>Formula:</strong> P(mW) = 10^(dBm / 10)" +
+                  "<br><br>" +
+                  "<strong>Input:</strong> " + dbmInput + " dBm<br>" +
+                  "<strong>In Watts:</strong> " + formatPowerWatts(watts) + "<br>" +
+                  "<strong>In dBW:</strong> " + (dbmInput - 30).toFixed(4) + " dBW";
+
+        showResult(resultPrimary, details);
+        return;
+    }
+
+    /* MODE 4: Linear Power -> dBW */
+    if (selectedCalculation === "dbw") {
+        if (!Number.isFinite(linearWatts) || linearWatts <= 0) {
+            showError("Please enter a positive power value greater than 0.");
+            return;
+        }
+
+        const dbw = 10 * Math.log10(linearWatts);
+        const dbm = dbw + 30;
+
+        resultPrimary = dbw.toFixed(4) + " dBW";
+
+        details = "<strong>Formula:</strong> P(dBW) = 10 × log₁₀(P(W))" +
+                  "<br><br>" +
+                  "<strong>Input Power:</strong> " + formatPowerWatts(linearWatts) + "<br>" +
+                  "<strong>In dBm:</strong> " + dbm.toFixed(4) + " dBm<br>" +
+                  "<strong>In mW:</strong> " + formatMilliwatts(linearWatts * 1000);
+
+        showResult(resultPrimary, details);
+    }
+}
+
+function formatPowerWatts(watts) {
+    if (watts >= 1000) {
+        return Number((watts / 1000).toFixed(4)) + " kW";
+    }
+    if (watts >= 1) {
+        return Number(watts.toFixed(4)) + " W";
+    }
+    if (watts >= 0.001) {
+        return Number((watts * 1000).toFixed(4)) + " mW";
+    }
+    if (watts >= 0.000001) {
+        return Number((watts * 1000000).toFixed(4)) + " µW";
+    }
+    if (watts >= 0.000000001) {
+        return Number((watts * 1000000000).toFixed(4)) + " nW";
+    }
+    if (watts >= 0.000000000001) {
+        return Number((watts * 1000000000000).toFixed(4)) + " pW";
+    }
+    return watts.toExponential(4) + " W";
+}
+
+function formatMilliwatts(mw) {
+    if (mw >= 1000000) {
+        return Number((mw / 1000000).toFixed(4)) + " kW";
+    }
+    if (mw >= 1000) {
+        return Number((mw / 1000).toFixed(4)) + " W";
+    }
+    if (mw >= 1) {
+        return Number(mw.toFixed(4)) + " mW";
+    }
+    if (mw >= 0.001) {
+        return Number((mw * 1000).toFixed(4)) + " µW";
+    }
+    if (mw >= 0.000001) {
+        return Number((mw * 1000000).toFixed(4)) + " nW";
+    }
+    if (mw >= 0.000000001) {
+        return Number((mw * 1000000000).toFixed(4)) + " pW";
+    }
+    return mw.toExponential(4) + " mW";
+}
+
+function showResult(value, details) {
+    document.getElementById("resultValue").textContent = value;
+    document.getElementById("resultDetails").innerHTML = details;
+    document.getElementById("result").classList.add("show");
+}
+
+function showError(message) {
+    document.getElementById("resultValue").textContent = "Input Error";
+    document.getElementById("resultDetails").innerHTML = "<span style='color: #dc2626;'>" + message + "</span>";
+    document.getElementById("result").classList.add("show");
+}
+
+function resetCalculator() {
+    document.getElementById("dbm").value = "";
+    document.getElementById("watt").value = "";
+    document.getElementById("powerUnit").value = "0.001";
+
+    selectedCalculation = "watt";
+
+    document.querySelectorAll(".calculation-option").forEach(function(option) {
+        option.classList.remove("selected");
+    });
+    document.querySelector(".calculation-option").classList.add("selected");
+
+    document.getElementById("result").classList.remove("show");
+    updateFormVisibility();
+}
+
+// Initial UI setup
+updateFormVisibility();
+</script>
+
+</body>
+</html>

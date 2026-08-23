@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>RC Time Constant Calculator | Circuit Formula</title>
+
+    <meta name="description"
+          content="Calculate the RC time constant, capacitor charging time, resistor value, or capacitor value for an RC circuit.">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f8fa;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #111827;
+        }
+
+        .section {
+            padding: 60px 0 80px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .breadcrumb a:hover {
+            color: #111827;
+            text-decoration: underline;
+        }
+
+        .page-heading {
+            margin-bottom: 35px;
+        }
+
+        .page-heading h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+        .calculator-box {
+            max-width: 850px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 60px;
+        }
+
+        .step {
+            margin-bottom: 30px;
+        }
+
+        .step-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .step h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        .calculation-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .calculation-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 16px;
+            cursor: pointer;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+
+        .calculation-option:hover {
+            border-color: #9ca3af;
+        }
+
+        .calculation-option.selected {
+            border-color: #111827;
+            background: #f3f4f6;
+        }
+
+        .calculation-option strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .calculation-option span {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .circuit-box {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .circuit-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .circuit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .circuit-item {
+            padding: 12px 18px;
+            border: 2px solid #374151;
+            border-radius: 7px;
+            background: white;
+            font-weight: 600;
+        }
+
+        .resistor {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .capacitor {
+            border-color: #7c3aed;
+            color: #7c3aed;
+        }
+
+        .source {
+            border-color: #059669;
+            color: #059669;
+        }
+
+        .wire {
+            font-weight: 700;
+            color: #6b7280;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-row input {
+            flex: 1;
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-row input:focus {
+            border-color: #111827;
+        }
+
+        .input-row select {
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 16px;
+            background: white;
+            outline: none;
+        }
+
+        .unit {
+            min-width: 45px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .calculate-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .calculate-button:hover {
+            background: #374151;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #111827;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .reset-button:hover {
+            background: #d1d5db;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 9px;
+            background: #f3f4f6;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .result-formula {
+            margin-top: 10px;
+            color: #4b5563;
+        }
+
+        .content {
+            max-width: 850px;
+        }
+
+        .content h2 {
+            margin-top: 35px;
+            margin-bottom: 12px;
+            font-size: 27px;
+        }
+
+        .content p {
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+
+        .content ul {
+            padding-left: 25px;
+            color: #4b5563;
+        }
+
+        .formula {
+            display: inline-block;
+            padding: 14px 20px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-weight: 700;
+            margin: 10px 0 20px;
+        }
+
+        .footer {
+            background: #111827;
+            color: white;
+            padding-top: 45px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+        }
+
+        .copyright {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        @media (max-width: 650px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .page-heading h1 {
+                font-size: 34px;
+            }
+
+            .calculator-box {
+                padding: 20px;
+            }
+
+            .calculation-options {
+                grid-template-columns: 1fr;
+            }
+
+            .circuit {
+                flex-direction: column;
+            }
+
+            .wire {
+                transform: rotate(90deg);
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="container nav">
+
+        <a href="../index.html" class="logo">
+            Circuit Formula
+        </a>
+
+        <nav class="nav-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../index.html#categories">
+                Categories
+            </a>
+
+            <a href="../index.html#calculators">
+                Calculators
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<section class="section">
+
+<div class="container">
+
+
+    <div class="breadcrumb">
+
+        <a href="../index.html">
+            Home
+        </a>
+
+        <span>/</span>
+
+        <a href="../index.html#categories">
+            Basic Electronics
+        </a>
+
+        <span>/</span>
+
+        <span>
+            RC Time Constant
+        </span>
+
+    </div>
+
+
+    <div class="page-heading">
+
+        <h1>
+            RC Time Constant Calculator
+        </h1>
+
+        <p>
+            Calculate the RC time constant, resistor, capacitor, or capacitor charging time.
+        </p>
+
+    </div>
+
+
+    <div class="calculator-box">
+
+
+        <!-- CIRCUIT -->
+
+        <div class="circuit-box">
+
+            <div class="circuit-title">
+                Basic RC Circuit
+            </div>
+
+            <div class="circuit">
+
+                <div class="circuit-item source">
+                    V
+                </div>
+
+                <div class="wire">
+                    →
+                </div>
+
+                <div class="circuit-item resistor">
+                    R
+                </div>
+
+                <div class="wire">
+                    →
+                </div>
+
+                <div class="circuit-item capacitor">
+                    C
+                </div>
+
+                <div class="wire">
+                    →
+                </div>
+
+                <div class="circuit-item">
+                    GND
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STEP 1 -->
+
+        <div class="step">
+
+            <div class="step-number">
+                STEP 1
+            </div>
+
+            <h2>
+                What do you want to calculate?
+            </h2>
+
+
+            <div class="calculation-options">
+
+
+                <div
+                    class="calculation-option selected"
+                    onclick="selectCalculation('tau', this)">
+
+                    <strong>
+                        Time Constant
+                    </strong>
+
+                    <span>
+                        Calculate τ
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('resistor', this)">
+
+                    <strong>
+                        Resistor
+                    </strong>
+
+                    <span>
+                        Calculate R
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('capacitor', this)">
+
+                    <strong>
+                        Capacitor
+                    </strong>
+
+                    <span>
+                        Calculate C
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('time', this)">
+
+                    <strong>
+                        Charging Time
+                    </strong>
+
+                    <span>
+                        Calculate time to reach a voltage
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- STEP 2 -->
+
+        <div class="step">
+
+            <div class="step-number">
+                STEP 2
+            </div>
+
+            <h2>
+                Enter the values you know
+            </h2>
+
+
+            <!-- RESISTOR -->
+
+            <div class="input-group">
+
+                <label for="resistance">
+                    Resistance
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="resistance"
+                        placeholder="Example: 10000"
+                        step="any"
+                        min="0">
+
+                    <select id="resistanceUnit">
+
+                        <option value="1">
+                            Ω
+                        </option>
+
+                        <option value="1000">
+                            kΩ
+                        </option>
+
+                        <option value="1000000">
+                            MΩ
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- CAPACITOR -->
+
+            <div class="input-group">
+
+                <label for="capacitance">
+                    Capacitance
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="capacitance"
+                        placeholder="Example: 100"
+                        step="any"
+                        min="0">
+
+                    <select id="capacitanceUnit">
+
+                        <option value="0.000000000001">
+                            pF
+                        </option>
+
+                        <option value="0.000000001">
+                            nF
+                        </option>
+
+                        <option value="0.000001" selected>
+                            µF
+                        </option>
+
+                        <option value="0.001">
+                            mF
+                        </option>
+
+                        <option value="1">
+                            F
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- TIME -->
+
+            <div
+                class="input-group"
+                id="timeGroup"
+                style="display:none;">
+
+                <label for="targetVoltage">
+                    Target Voltage
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="targetVoltage"
+                        placeholder="Example: 4.2"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        V
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUPPLY -->
+
+            <div
+                class="input-group"
+                id="supplyGroup"
+                style="display:none;">
+
+                <label for="supplyVoltage">
+                    Supply Voltage
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="supplyVoltage"
+                        placeholder="Example: 5"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        V
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- TIME CONSTANT -->
+
+            <div
+                class="input-group"
+                id="tauGroup"
+                style="display:none;">
+
+                <label for="timeConstant">
+                    Time Constant
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="timeConstant"
+                        placeholder="Example: 0.001"
+                        step="any"
+                        min="0">
+
+                    <select id="timeConstantUnit">
+
+                        <option value="0.000001">
+                            µs
+                        </option>
+
+                        <option value="0.001">
+                            ms
+                        </option>
+
+                        <option value="1" selected>
+                            s
+                        </option>
+
+                        <option value="60">
+                            min
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="calculate-button"
+                onclick="calculate()">
+
+                Calculate
+
+            </button>
+
+
+            <button
+                class="reset-button"
+                onclick="resetCalculator()">
+
+                Reset
+
+            </button>
+
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div
+            id="result"
+            class="result">
+
+            <div class="result-title">
+                Result
+            </div>
+
+            <div
+                id="resultValue"
+                class="result-value">
+            </div>
+
+            <div
+                id="resultFormula"
+                class="result-formula">
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- INFORMATION -->
+
+    <article class="content">
+
+
+        <h2>
+            What is an RC Time Constant?
+        </h2>
+
+        <p>
+            The RC time constant describes how quickly a capacitor
+            charges or discharges through a resistor.
+        </p>
+
+        <p>
+            The symbol for the time constant is τ, pronounced "tau".
+        </p>
+
+
+        <h2>
+            RC Time Constant Formula
+        </h2>
+
+        <div class="formula">
+            τ = R × C
+        </div>
+
+
+        <h2>
+            What Happens During Charging?
+        </h2>
+
+        <p>
+            After one time constant, the capacitor reaches approximately
+            63.2% of its final voltage.
+        </p>
+
+        <p>
+            After five time constants, the capacitor reaches approximately
+            99.3% of its final voltage.
+        </p>
+
+
+        <h2>
+            Common RC Timing Points
+        </h2>
+
+        <ul>
+
+            <li>
+                1τ = 63.2%
+            </li>
+
+            <li>
+                2τ = 86.5%
+            </li>
+
+            <li>
+                3τ = 95.0%
+            </li>
+
+            <li>
+                4τ = 98.2%
+            </li>
+
+            <li>
+                5τ = 99.3%
+            </li>
+
+        </ul>
+
+
+        <h2>
+            Capacitor Charging Formula
+        </h2>
+
+        <div class="formula">
+            Vc = Vs × (1 - e<sup>-t/RC</sup>)
+        </div>
+
+
+        <p>
+            This formula calculates the capacitor voltage during charging.
+        </p>
+
+
+    </article>
+
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div>
+
+            <div class="logo">
+                Circuit Formula
+            </div>
+
+            <p>
+                Electronics calculators for circuit design,
+                embedded systems, RF, PCB and power electronics.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../about.html">
+                About
+            </a>
+
+            <a href="../contact.html">
+                Contact
+            </a>
+
+            <a href="../privacy.html">
+                Privacy
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 Circuit Formula. All rights reserved.
+
+    </div>
+
+</footer>
+
+
+<script>
+
+let selectedCalculation = "tau";
+
+
+function selectCalculation(type, element) {
+
+    selectedCalculation = type;
+
+
+    document
+        .querySelectorAll(".calculation-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    element.classList.add("selected");
+
+
+    hideSpecialInputs();
+
+
+    if (type === "tau") {
+
+        document.getElementById("resistance").parentElement.parentElement.style.display = "block";
+
+        document.getElementById("capacitance").parentElement.parentElement.style.display = "block";
+
+    }
+
+
+    else if (type === "resistor") {
+
+        document.getElementById("capacitance").parentElement.parentElement.style.display = "block";
+
+        document.getElementById("tauGroup").style.display = "block";
+
+    }
+
+
+    else if (type === "capacitor") {
+
+        document.getElementById("resistance").parentElement.parentElement.style.display = "block";
+
+        document.getElementById("tauGroup").style.display = "block";
+
+    }
+
+
+    else if (type === "time") {
+
+        document.getElementById("resistance").parentElement.parentElement.style.display = "block";
+
+        document.getElementById("capacitance").parentElement.parentElement.style.display = "block";
+
+        document.getElementById("timeGroup").style.display = "block";
+
+        document.getElementById("supplyGroup").style.display = "block";
+
+    }
+
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+
+}
+
+
+function hideSpecialInputs() {
+
+    document.getElementById("timeGroup").style.display = "none";
+
+    document.getElementById("supplyGroup").style.display = "none";
+
+    document.getElementById("tauGroup").style.display = "none";
+
+
+    document.getElementById("resistance").parentElement.parentElement.style.display = "none";
+
+    document.getElementById("capacitance").parentElement.parentElement.style.display = "none";
+
+}
+
+
+function calculate() {
+
+    const R =
+        parseFloat(
+            document.getElementById("resistance").value
+        ) *
+        parseFloat(
+            document.getElementById("resistanceUnit").value
+        );
+
+
+    const C =
+        parseFloat(
+            document.getElementById("capacitance").value
+        ) *
+        parseFloat(
+            document.getElementById("capacitanceUnit").value
+        );
+
+
+    const tau =
+        parseFloat(
+            document.getElementById("timeConstant").value
+        ) *
+        parseFloat(
+            document.getElementById("timeConstantUnit").value
+        );
+
+
+    const targetVoltage =
+        parseFloat(
+            document.getElementById("targetVoltage").value
+        );
+
+
+    const supplyVoltage =
+        parseFloat(
+            document.getElementById("supplyVoltage").value
+        );
+
+
+    let result;
+    let formula;
+
+
+    if (selectedCalculation === "tau") {
+
+        if (!validPositive(R) || !validPositive(C)) {
+
+            showError(
+                "Enter a valid resistance and capacitance."
+            );
+
+            return;
+        }
+
+
+        result = R * C;
+
+        formula =
+            "τ = R × C";
+
+    }
+
+
+    else if (selectedCalculation === "resistor") {
+
+        if (!validPositive(C) || !validPositive(tau)) {
+
+            showError(
+                "Enter a valid capacitance and time constant."
+            );
+
+            return;
+        }
+
+
+        result = tau / C;
+
+        formula =
+            "R = τ ÷ C";
+
+    }
+
+
+    else if (selectedCalculation === "capacitor") {
+
+        if (!validPositive(R) || !validPositive(tau)) {
+
+            showError(
+                "Enter a valid resistance and time constant."
+            );
+
+            return;
+        }
+
+
+        result = tau / R;
+
+        formula =
+            "C = τ ÷ R";
+
+    }
+
+
+    else if (selectedCalculation === "time") {
+
+        if (
+            !validPositive(R) ||
+            !validPositive(C) ||
+            !validPositive(targetVoltage) ||
+            !validPositive(supplyVoltage)
+        ) {
+
+            showError(
+                "Enter valid resistance, capacitance, target voltage and supply voltage."
+            );
+
+            return;
+        }
+
+
+        if (targetVoltage >= supplyVoltage) {
+
+            showError(
+                "Target voltage must be lower than supply voltage."
+            );
+
+            return;
+        }
+
+
+        const time =
+            -R * C *
+            Math.log(
+                1 -
+                (targetVoltage / supplyVoltage)
+            );
+
+
+        result = time;
+
+        formula =
+            "t = -RC × ln(1 - Vc/Vs)";
+
+    }
+
+
+    showResult(
+        formatTime(result),
+        formula
+    );
+
+}
+
+
+function validPositive(value) {
+
+    return Number.isFinite(value) && value > 0;
+
+}
+
+
+function formatTime(seconds) {
+
+    if (seconds < 0.000001) {
+
+        return (
+            Number((seconds * 1000000000).toFixed(4))
+            + " ns"
+        );
+
+    }
+
+
+    if (seconds < 0.001) {
+
+        return (
+            Number((seconds * 1000000).toFixed(4))
+            + " µs"
+        );
+
+    }
+
+
+    if (seconds < 1) {
+
+        return (
+            Number((seconds * 1000).toFixed(4))
+            + " ms"
+        );
+
+    }
+
+
+    if (seconds < 60) {
+
+        return (
+            Number(seconds.toFixed(4))
+            + " s"
+        );
+
+    }
+
+
+    if (seconds < 3600) {
+
+        return (
+            Number((seconds / 60).toFixed(4))
+            + " min"
+        );
+
+    }
+
+
+    return (
+        Number((seconds / 3600).toFixed(4))
+        + " h"
+    );
+
+}
+
+
+function formatResistance(ohms) {
+
+    if (ohms >= 1000000) {
+
+        return (
+            Number((ohms / 1000000).toFixed(4))
+            + " MΩ"
+        );
+
+    }
+
+
+    if (ohms >= 1000) {
+
+        return (
+            Number((ohms / 1000).toFixed(4))
+            + " kΩ"
+        );
+
+    }
+
+
+    return (
+        Number(ohms.toFixed(6))
+        + " Ω"
+    );
+
+}
+
+
+function formatCapacitance(farads) {
+
+    if (farads >= 1) {
+
+        return (
+            Number(farads.toFixed(6))
+            + " F"
+        );
+
+    }
+
+
+    if (farads >= 0.001) {
+
+        return (
+            Number((farads * 1000).toFixed(6))
+            + " mF"
+        );
+
+    }
+
+
+    if (farads >= 0.000001) {
+
+        return (
+            Number((farads * 1000000).toFixed(6))
+            + " µF"
+        );
+
+    }
+
+
+    if (farads >= 0.000000001) {
+
+        return (
+            Number((farads * 1000000000).toFixed(6))
+            + " nF"
+        );
+
+    }
+
+
+    return (
+        Number((farads * 1000000000000).toFixed(6))
+        + " pF"
+    );
+
+}
+
+
+function showResult(value, formula) {
+
+    document.getElementById("resultValue").textContent =
+        value;
+
+    document.getElementById("resultFormula").textContent =
+        formula;
+
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function showError(message) {
+
+    document.getElementById("resultValue").textContent =
+        "Check your input";
+
+    document.getElementById("resultFormula").textContent =
+        message;
+
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function resetCalculator() {
+
+    document.getElementById("resistance").value = "";
+
+    document.getElementById("capacitance").value = "";
+
+    document.getElementById("timeConstant").value = "";
+
+    document.getElementById("targetVoltage").value = "";
+
+    document.getElementById("supplyVoltage").value = "";
+
+
+    selectedCalculation = "tau";
+
+
+    document
+        .querySelectorAll(".calculation-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    document
+        .querySelector(".calculation-option")
+        .classList.add("selected");
+
+
+    hideSpecialInputs();
+
+
+    document.getElementById("resistance").parentElement.parentElement.style.display = "block";
+
+    document.getElementById("capacitance").parentElement.parentElement.style.display = "block";
+
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+
+}
+
+
+selectCalculation(
+    "tau",
+    document.querySelector(".calculation-option")
+);
+
+</script>
+
+
+</body>
+
+</html>

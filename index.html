@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Electronics Calculators | Circuit, RF, PCB & Embedded Tools</title>
+
+    <meta name="description"
+          content="Free electronics calculators for circuit design, embedded systems, RF, PCB, analog, digital and power electronics.">
+
+    <meta name="keywords"
+          content="electronics calculator, circuit calculator, RF calculator, PCB calculator, embedded calculator">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="container nav">
+
+        <a href="index.html" class="logo">
+            Circuit Formula
+        </a>
+
+        <nav>
+            <a href="#calculators">Calculators</a>
+            <a href="#categories">Categories</a>
+            <a href="#popular">Popular</a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+    <div class="container hero-content">
+
+        <span class="hero-label">
+            ELECTRONICS ENGINEERING TOOLS
+        </span>
+
+        <h1>
+            Electronics Calculators
+        </h1>
+
+        <p>
+            Practical calculators for electronics, embedded systems,
+            RF, PCB design, power electronics and signal processing.
+        </p>
+
+        <div class="search-box">
+
+            <input
+                type="search"
+                id="calculatorSearch"
+                placeholder="Search calculators..."
+                autocomplete="off"
+            >
+
+            <button onclick="searchCalculators()">
+                Search
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="popular" class="section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <h2>
+                Popular Calculators
+            </h2>
+
+            <p>
+                Start with commonly used electronics calculations.
+            </p>
+
+        </div>
+
+
+        <div class="calculator-grid">
+
+            <a href="calculators/ohms-law.html"
+               class="calculator-card">
+
+                <span class="card-icon">Ω</span>
+
+                <h3>Ohm's Law</h3>
+
+                <p>
+                    Calculate voltage, current, resistance and power.
+                </p>
+
+            </a>
+
+
+            <a href="calculators/voltage-divider.html"
+               class="calculator-card">
+
+                <span class="card-icon">V</span>
+
+                <h3>Voltage Divider</h3>
+
+                <p>
+                    Calculate output voltage from resistor values.
+                </p>
+
+            </a>
+
+
+            <a href="calculators/led-resistor.html"
+               class="calculator-card">
+
+                <span class="card-icon">LED</span>
+
+                <h3>LED Resistor</h3>
+
+                <p>
+                    Calculate the resistor required for an LED.
+                </p>
+
+            </a>
+
+
+            <a href="calculators/resistor-color-code.html"
+               class="calculator-card">
+
+                <span class="card-icon">R</span>
+
+                <h3>Resistor Color Code</h3>
+
+                <p>
+                    Find resistor value from color bands.
+                </p>
+
+            </a>
+
+
+            <a href="calculators/uart-baud-rate.html"
+               class="calculator-card">
+
+                <span class="card-icon">UART</span>
+
+                <h3>UART Baud Rate</h3>
+
+                <p>
+                    Calculate UART baud rate and clock settings.
+                </p>
+
+            </a>
+
+
+            <a href="calculators/rf-wavelength.html"
+               class="calculator-card">
+
+                <span class="card-icon">RF</span>
+
+                <h3>RF Wavelength</h3>
+
+                <p>
+                    Calculate wavelength from frequency.
+                </p>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="categories" class="section categories-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <h2>
+                Calculator Categories
+            </h2>
+
+            <p>
+                Select an engineering category.
+            </p>
+
+        </div>
+
+
+        <div class="category-grid">
+
+
+            <a href="categories/basic-electronics.html"
+               class="category-card">
+
+                <span>01</span>
+
+                <h3>
+                    Basic Electronics
+                </h3>
+
+                <p>
+                    Ohm's law, resistors, capacitors,
+                    power, batteries and more.
+                </p>
+
+                <strong>
+                    View Calculators →
+                </strong>
+
+            </a>
+
+
+            <a href="categories/embedded.html"
+               class="category-card">
+
+                <span>02</span>
+
+                <h3>
+                    Embedded Systems
+                </h3>
+
+                <p>
+                    UART, SPI, I2C, PWM, ADC,
+                    timers and microcontrollers.
+                </p>
+
+                <strong>
+                    View Calculators →
+                </strong>
+
+            </a>
+
+
+            <a href="categories/rf.html"
+               class="category-card">
+
+                <span>03</span>
+
+                <h3>
+                    RF & Wireless
+                </h3>
+
+                <p>
+                    RF power, wavelength, link budget,
+                    VSWR and impedance.
+                </p>
+
+                <strong>
+                    View Calculators →
+                </strong>
+
+            </a>
+
+
+            <a href="categories/pcb.html"
+               class="category-card">
+
+                <span>04</span>
+
+                <h3>
+                    PCB Design
+                </h3>
+
+                <p>
+                    Trace width, impedance,
+                    vias and PCB calculations.
+                </p>
+
+                <strong>
+                    View Calculators →
+                </strong>
+
+            </a>
+
+
+            <a href="categories/power-electronics.html"
+               class="category-card">
+
+                <span>05</span>
+
+                <h3>
+                    Power Electronics
+                </h3>
+
+                <p>
+                    Buck, boost, MOSFET,
+                    transformer and thermal calculations.
+                </p>
+
+                <strong>
+                    View Calculators →
+                </strong>
+
+            </a>
+
+
+            <a href="categories/analog.html"
+               class="category-card">
+
+                <span>06</span>
+
+                <h3>
+                    Analog Electronics
+                </h3>
+
+                <p>
+                    Op amps, BJT, MOSFET,
+                    diode and amplifier calculations.
+                </p>
+
+                <strong>
+                    View Calculators →
+                </strong>
+
+            </a>
+
+
+            <a href="categories/digital.html"
+               class="category-card">
+
+                <span>07</span>
+
+                <h3>
+                    Digital Electronics
+                </h3>
+
+                <p>
+                    Binary, hexadecimal,
+                    logic and digital calculations.
+                </p>
+
+                <strong>
+                    View Calculators →
+                </strong>
+
+            </a>
+
+
+            <a href="categories/signal-processing.html"
+               class="category-card">
+
+                <span>08</span>
+
+                <h3>
+                    Signal Processing
+                </h3>
+
+                <p>
+                    Sampling, FFT, RMS,
+                    SNR and frequency calculations.
+                </p>
+
+                <strong>
+                    View Calculators →
+                </strong>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="calculators" class="section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <h2>
+                All Calculators
+            </h2>
+
+            <p>
+                Browse the available engineering tools.
+            </p>
+
+        </div>
+
+
+        <div class="all-calculators" id="calculatorList">
+
+
+            <a href="calculators/ohms-law.html"
+               class="tool-item"
+               data-name="ohms law">
+
+                Ohm's Law
+
+            </a>
+
+
+            <a href="calculators/voltage-divider.html"
+               class="tool-item"
+               data-name="voltage divider">
+
+                Voltage Divider
+
+            </a>
+
+
+            <a href="calculators/led-resistor.html"
+               class="tool-item"
+               data-name="led resistor">
+
+                LED Resistor
+
+            </a>
+
+
+            <a href="calculators/resistor-color-code.html"
+               class="tool-item"
+               data-name="resistor color code">
+
+                Resistor Color Code
+
+            </a>
+
+
+            <a href="calculators/rc-time-constant.html"
+               class="tool-item"
+               data-name="rc time constant">
+
+                RC Time Constant
+
+            </a>
+
+
+            <a href="calculators/uart-baud-rate.html"
+               class="tool-item"
+               data-name="uart baud rate">
+
+                UART Baud Rate
+
+            </a>
+
+
+            <a href="calculators/pwm-frequency.html"
+               class="tool-item"
+               data-name="pwm frequency">
+
+                PWM Frequency
+
+            </a>
+
+
+            <a href="calculators/adc-voltage.html"
+               class="tool-item"
+               data-name="adc voltage">
+
+                ADC Voltage
+
+            </a>
+
+
+            <a href="calculators/rf-wavelength.html"
+               class="tool-item"
+               data-name="rf wavelength">
+
+                RF Wavelength
+
+            </a>
+
+
+            <a href="calculators/dbm-to-watt.html"
+               class="tool-item"
+               data-name="dbm watt">
+
+                dBm to Watt
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div>
+
+            <div class="logo">
+                Circuit Formula
+            </div>
+
+            <p>
+                Engineering calculators for electronics
+                and embedded systems.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="about.html">About</a>
+
+            <a href="contact.html">Contact</a>
+
+            <a href="privacy.html">Privacy</a>
+
+            <a href="terms.html">Terms</a>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 Circuit Formula. All rights reserved.
+
+    </div>
+
+</footer>
+
+
+<script src="js/main.js"></script>
+
+</body>
+</html>

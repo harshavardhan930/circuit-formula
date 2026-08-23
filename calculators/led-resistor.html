@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>LED Resistor Calculator | Circuit Formula</title>
+
+    <meta name="description"
+          content="Calculate the resistor required for an LED circuit. Find LED resistor value, LED current, supply voltage or LED forward voltage.">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f8fa;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+
+        /* HEADER */
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #111827;
+        }
+
+
+        /* MAIN */
+
+        .section {
+            padding: 60px 0 80px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .breadcrumb a:hover {
+            color: #111827;
+            text-decoration: underline;
+        }
+
+
+        /* HEADING */
+
+        .page-heading {
+            margin-bottom: 35px;
+        }
+
+        .page-heading h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+
+        /* CALCULATOR */
+
+        .calculator-box {
+            max-width: 700px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 60px;
+        }
+
+
+        /* STEP */
+
+        .step {
+            margin-bottom: 30px;
+        }
+
+        .step-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .step h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+
+        /* OPTIONS */
+
+        .calculation-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .calculation-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 16px;
+            cursor: pointer;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+
+        .calculation-option:hover {
+            border-color: #9ca3af;
+        }
+
+        .calculation-option.selected {
+            border-color: #111827;
+            background: #f3f4f6;
+        }
+
+        .calculation-option strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .calculation-option span {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+
+        /* CIRCUIT DIAGRAM */
+
+        .circuit-box {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .circuit-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .circuit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 15px;
+        }
+
+        .circuit-item {
+            padding: 12px 15px;
+            border: 2px solid #374151;
+            border-radius: 7px;
+            background: white;
+            font-weight: 600;
+        }
+
+        .wire {
+            font-weight: 700;
+            color: #6b7280;
+        }
+
+        .led {
+            border-color: #dc2626;
+            color: #dc2626;
+        }
+
+        .resistor {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .ground {
+            border-color: #111827;
+        }
+
+
+        /* INPUTS */
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .input-help {
+            display: block;
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-row input,
+        .input-row select {
+            flex: 1;
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 16px;
+            outline: none;
+            background: white;
+        }
+
+        .input-row input:focus,
+        .input-row select:focus {
+            border-color: #111827;
+        }
+
+        .unit {
+            min-width: 35px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+
+        /* BUTTONS */
+
+        .calculate-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .calculate-button:hover {
+            background: #374151;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #111827;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .reset-button:hover {
+            background: #d1d5db;
+        }
+
+
+        /* RESULT */
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 9px;
+            background: #f3f4f6;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .result-formula {
+            margin-top: 10px;
+            color: #6b7280;
+        }
+
+        .result-extra {
+            margin-top: 12px;
+            color: #4b5563;
+        }
+
+
+        /* CONTENT */
+
+        .content {
+            max-width: 850px;
+        }
+
+        .content h2 {
+            margin-top: 35px;
+            margin-bottom: 12px;
+            font-size: 27px;
+        }
+
+        .content h3 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .content p {
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+
+        .content ul {
+            padding-left: 25px;
+            color: #4b5563;
+        }
+
+        .formula {
+            display: inline-block;
+            padding: 14px 20px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-weight: 700;
+            margin: 10px 0 20px;
+        }
+
+
+        /* FOOTER */
+
+        .footer {
+            background: #111827;
+            color: white;
+            padding-top: 45px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+        }
+
+        .copyright {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 650px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .page-heading h1 {
+                font-size: 34px;
+            }
+
+            .calculator-box {
+                padding: 20px;
+            }
+
+            .calculation-options {
+                grid-template-columns: 1fr;
+            }
+
+            .circuit {
+                flex-direction: column;
+            }
+
+            .wire {
+                transform: rotate(90deg);
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="container nav">
+
+        <a href="../index.html" class="logo">
+            Circuit Formula
+        </a>
+
+        <nav class="nav-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../index.html#categories">
+                Categories
+            </a>
+
+            <a href="../index.html#calculators">
+                Calculators
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main>
+
+<section class="section">
+
+<div class="container">
+
+
+    <!-- BREADCRUMB -->
+
+    <div class="breadcrumb">
+
+        <a href="../index.html">
+            Home
+        </a>
+
+        <span>/</span>
+
+        <a href="../index.html#categories">
+            Basic Electronics
+        </a>
+
+        <span>/</span>
+
+        <span>
+            LED Resistor
+        </span>
+
+    </div>
+
+
+    <!-- HEADING -->
+
+    <div class="page-heading">
+
+        <h1>
+            LED Resistor Calculator
+        </h1>
+
+        <p>
+            Calculate the resistor needed to safely connect an LED to a power supply.
+        </p>
+
+    </div>
+
+
+    <!-- CALCULATOR -->
+
+    <div class="calculator-box">
+
+
+        <!-- CIRCUIT -->
+
+        <div class="circuit-box">
+
+            <div class="circuit-title">
+                Basic LED Circuit
+            </div>
+
+            <div class="circuit">
+
+                <div class="circuit-item">
+                    VCC
+                </div>
+
+                <div class="wire">
+                    →
+                </div>
+
+                <div class="circuit-item resistor">
+                    R
+                </div>
+
+                <div class="wire">
+                    →
+                </div>
+
+                <div class="circuit-item led">
+                    LED
+                </div>
+
+                <div class="wire">
+                    →
+                </div>
+
+                <div class="circuit-item ground">
+                    GND
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STEP 1 -->
+
+        <div class="step">
+
+            <div class="step-number">
+                STEP 1
+            </div>
+
+            <h2>
+                What do you want to calculate?
+            </h2>
+
+
+            <div class="calculation-options">
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('resistor', this)">
+
+                    <strong>
+                        Resistor Value
+                    </strong>
+
+                    <span>
+                        Calculate R
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('current', this)">
+
+                    <strong>
+                        LED Current
+                    </strong>
+
+                    <span>
+                        Calculate I
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('supply', this)">
+
+                    <strong>
+                        Supply Voltage
+                    </strong>
+
+                    <span>
+                        Calculate Vs
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="calculation-option"
+                    onclick="selectCalculation('forward', this)">
+
+                    <strong>
+                        LED Forward Voltage
+                    </strong>
+
+                    <span>
+                        Calculate Vf
+                    </span>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- STEP 2 -->
+
+        <div
+            class="step"
+            id="inputsSection"
+            style="display:none;">
+
+            <div class="step-number">
+                STEP 2
+            </div>
+
+            <h2>
+                Enter the values you know
+            </h2>
+
+
+            <!-- SUPPLY VOLTAGE -->
+
+            <div
+                class="input-group"
+                id="supplyGroup">
+
+                <label for="supplyVoltage">
+                    Supply Voltage
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="supplyVoltage"
+                        placeholder="Example: 5"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        V
+                    </span>
+
+                </div>
+
+                <span class="input-help">
+                    Voltage provided by your power supply or microcontroller.
+                </span>
+
+            </div>
+
+
+            <!-- FORWARD VOLTAGE -->
+
+            <div
+                class="input-group"
+                id="forwardGroup">
+
+                <label for="forwardVoltage">
+                    LED Forward Voltage
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="forwardVoltage"
+                        placeholder="Example: 2"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        V
+                    </span>
+
+                </div>
+
+                <span class="input-help">
+                    Typical red LED: about 2 V. Blue or white LED: about 3 V.
+                </span>
+
+            </div>
+
+
+            <!-- CURRENT -->
+
+            <div
+                class="input-group"
+                id="currentGroup">
+
+                <label for="ledCurrent">
+                    LED Current
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="ledCurrent"
+                        placeholder="Example: 20"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        mA
+                    </span>
+
+                </div>
+
+                <span class="input-help">
+                    Enter the desired LED current.
+                </span>
+
+            </div>
+
+
+            <!-- RESISTOR -->
+
+            <div
+                class="input-group"
+                id="resistorGroup">
+
+                <label for="resistor">
+                    Resistor
+                </label>
+
+                <div class="input-row">
+
+                    <input
+                        type="number"
+                        id="resistor"
+                        placeholder="Example: 150"
+                        step="any"
+                        min="0">
+
+                    <span class="unit">
+                        Ω
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                class="calculate-button"
+                onclick="calculate()">
+
+                Calculate
+
+            </button>
+
+
+            <button
+                class="reset-button"
+                onclick="resetCalculator()">
+
+                Reset
+
+            </button>
+
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div
+            id="result"
+            class="result">
+
+            <div class="result-title">
+                Result
+            </div>
+
+            <div
+                id="resultValue"
+                class="result-value">
+            </div>
+
+            <div
+                id="resultFormula"
+                class="result-formula">
+            </div>
+
+            <div
+                id="resultExtra"
+                class="result-extra">
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- INFORMATION -->
+
+    <article class="content">
+
+
+        <h2>
+            What is an LED Resistor?
+        </h2>
+
+        <p>
+            An LED resistor limits the current flowing through an LED.
+            Without suitable current limiting, the LED can be damaged.
+        </p>
+
+
+        <h2>
+            LED Resistor Formula
+        </h2>
+
+        <div class="formula">
+            R = (Vs - Vf) ÷ I
+        </div>
+
+
+        <h2>
+            Variables
+        </h2>
+
+        <ul>
+
+            <li>
+                Vs = Supply voltage
+            </li>
+
+            <li>
+                Vf = LED forward voltage
+            </li>
+
+            <li>
+                I = LED current
+            </li>
+
+            <li>
+                R = Series resistor
+            </li>
+
+        </ul>
+
+
+        <h2>
+            Example
+        </h2>
+
+        <p>
+            Suppose you have a 5 V supply, a red LED with
+            a forward voltage of 2 V, and you want 20 mA.
+        </p>
+
+        <div class="formula">
+            R = (5 - 2) ÷ 0.020
+        </div>
+
+        <p>
+            R = 150 Ω
+        </p>
+
+
+        <h2>
+            Common LED Forward Voltages
+        </h2>
+
+        <ul>
+
+            <li>
+                Red LED: approximately 1.8 to 2.2 V
+            </li>
+
+            <li>
+                Yellow LED: approximately 2.0 to 2.2 V
+            </li>
+
+            <li>
+                Green LED: approximately 2.0 to 3.2 V
+            </li>
+
+            <li>
+                Blue LED: approximately 2.8 to 3.4 V
+            </li>
+
+            <li>
+                White LED: approximately 2.8 to 3.4 V
+            </li>
+
+        </ul>
+
+
+        <h2>
+            Resistor Power
+        </h2>
+
+        <p>
+            The resistor also dissipates power. After calculating
+            the resistor value, check its power rating.
+        </p>
+
+        <div class="formula">
+            P = I² × R
+        </div>
+
+
+    </article>
+
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer class="footer">
+
+    <div class="container footer-content">
+
+        <div>
+
+            <div class="logo">
+                Circuit Formula
+            </div>
+
+            <p>
+                Electronics calculators for circuit design,
+                embedded systems, RF, PCB and power electronics.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="../index.html">
+                Home
+            </a>
+
+            <a href="../about.html">
+                About
+            </a>
+
+            <a href="../contact.html">
+                Contact
+            </a>
+
+            <a href="../privacy.html">
+                Privacy
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 Circuit Formula. All rights reserved.
+
+    </div>
+
+</footer>
+
+
+<script>
+
+let selectedCalculation = "";
+
+
+function selectCalculation(type, element) {
+
+    selectedCalculation = type;
+
+
+    document
+        .querySelectorAll(".calculation-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    element.classList.add("selected");
+
+
+    document.getElementById("inputsSection").style.display = "block";
+
+
+    hideAllInputs();
+
+
+    if (type === "resistor") {
+
+        showInput("supplyGroup");
+        showInput("forwardGroup");
+        showInput("currentGroup");
+
+    }
+
+
+    else if (type === "current") {
+
+        showInput("supplyGroup");
+        showInput("forwardGroup");
+        showInput("resistorGroup");
+
+    }
+
+
+    else if (type === "supply") {
+
+        showInput("forwardGroup");
+        showInput("currentGroup");
+        showInput("resistorGroup");
+
+    }
+
+
+    else if (type === "forward") {
+
+        showInput("supplyGroup");
+        showInput("currentGroup");
+        showInput("resistorGroup");
+
+    }
+
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+
+}
+
+
+function hideAllInputs() {
+
+    document.getElementById("supplyGroup").style.display = "none";
+
+    document.getElementById("forwardGroup").style.display = "none";
+
+    document.getElementById("currentGroup").style.display = "none";
+
+    document.getElementById("resistorGroup").style.display = "none";
+
+}
+
+
+function showInput(id) {
+
+    document.getElementById(id).style.display = "block";
+
+}
+
+
+function calculate() {
+
+    const Vs =
+        parseFloat(
+            document.getElementById("supplyVoltage").value
+        );
+
+    const Vf =
+        parseFloat(
+            document.getElementById("forwardVoltage").value
+        );
+
+    const currentMA =
+        parseFloat(
+            document.getElementById("ledCurrent").value
+        );
+
+    const R =
+        parseFloat(
+            document.getElementById("resistor").value
+        );
+
+
+    const I =
+        currentMA / 1000;
+
+
+    let answer;
+
+    let unit;
+
+    let formula;
+
+    let extra = "";
+
+
+    /* RESISTOR */
+
+    if (selectedCalculation === "resistor") {
+
+        if (
+            isNaN(Vs) ||
+            isNaN(Vf) ||
+            isNaN(currentMA)
+        ) {
+
+            showError(
+                "Please enter supply voltage, LED forward voltage and LED current."
+            );
+
+            return;
+        }
+
+
+        if (Vs <= Vf) {
+
+            showError(
+                "Supply voltage must be greater than LED forward voltage."
+            );
+
+            return;
+        }
+
+
+        if (I <= 0) {
+
+            showError(
+                "LED current must be greater than zero."
+            );
+
+            return;
+        }
+
+
+        answer =
+            (Vs - Vf) / I;
+
+        unit = "Ω";
+
+
+        formula =
+            "R = (Vs - Vf) ÷ I = (" +
+            Vs +
+            " - " +
+            Vf +
+            ") ÷ " +
+            currentMA +
+            " mA";
+
+
+        const power =
+            I * I * answer;
+
+
+        extra =
+            "Resistor power = " +
+            formatNumber(power) +
+            " W. Choose a resistor with a suitable power rating.";
+
+    }
+
+
+    /* CURRENT */
+
+    else if (selectedCalculation === "current") {
+
+        if (
+            isNaN(Vs) ||
+            isNaN(Vf) ||
+            isNaN(R)
+        ) {
+
+            showError(
+                "Please enter supply voltage, LED forward voltage and resistor value."
+            );
+
+            return;
+        }
+
+
+        if (Vs <= Vf) {
+
+            showError(
+                "Supply voltage must be greater than LED forward voltage."
+            );
+
+            return;
+        }
+
+
+        if (R <= 0) {
+
+            showError(
+                "Resistor must be greater than zero."
+            );
+
+            return;
+        }
+
+
+        const current =
+            (Vs - Vf) / R;
+
+
+        answer =
+            current * 1000;
+
+        unit = "mA";
+
+
+        formula =
+            "I = (Vs - Vf) ÷ R";
+
+
+        const power =
+            current * current * R;
+
+
+        extra =
+            "Resistor power = " +
+            formatNumber(power) +
+            " W.";
+
+    }
+
+
+    /* SUPPLY VOLTAGE */
+
+    else if (selectedCalculation === "supply") {
+
+        if (
+            isNaN(Vf) ||
+            isNaN(currentMA) ||
+            isNaN(R)
+        ) {
+
+            showError(
+                "Please enter LED forward voltage, LED current and resistor value."
+            );
+
+            return;
+        }
+
+
+        if (I <= 0 || R <= 0) {
+
+            showError(
+                "Current and resistor must be greater than zero."
+            );
+
+            return;
+        }
+
+
+        answer =
+            Vf + (I * R);
+
+        unit = "V";
+
+
+        formula =
+            "Vs = Vf + (I × R)";
+
+    }
+
+
+    /* FORWARD VOLTAGE */
+
+    else if (selectedCalculation === "forward") {
+
+        if (
+            isNaN(Vs) ||
+            isNaN(currentMA) ||
+            isNaN(R)
+        ) {
+
+            showError(
+                "Please enter supply voltage, LED current and resistor value."
+            );
+
+            return;
+        }
+
+
+        if (I <= 0 || R <= 0) {
+
+            showError(
+                "Current and resistor must be greater than zero."
+            );
+
+            return;
+        }
+
+
+        answer =
+            Vs - (I * R);
+
+        unit = "V";
+
+
+        formula =
+            "Vf = Vs - (I × R)";
+
+    }
+
+
+    else {
+
+        showError(
+            "Please select what you want to calculate."
+        );
+
+        return;
+
+    }
+
+
+    document.getElementById("resultValue").textContent =
+        formatNumber(answer) + " " + unit;
+
+
+    document.getElementById("resultFormula").textContent =
+        formula;
+
+
+    document.getElementById("resultExtra").textContent =
+        extra;
+
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function showError(message) {
+
+    document.getElementById("resultValue").textContent =
+        "Check your input";
+
+    document.getElementById("resultFormula").textContent =
+        message;
+
+    document.getElementById("resultExtra").textContent =
+        "";
+
+
+    document
+        .getElementById("result")
+        .classList.add("show");
+
+}
+
+
+function formatNumber(value) {
+
+    if (!Number.isFinite(value)) {
+        return "Invalid";
+    }
+
+
+    if (Math.abs(value) >= 1000000) {
+
+        return value.toExponential(4);
+
+    }
+
+
+    return Number(
+        value.toFixed(6)
+    ).toString();
+
+}
+
+
+function resetCalculator() {
+
+    selectedCalculation = "";
+
+
+    document.getElementById("supplyVoltage").value = "";
+
+    document.getElementById("forwardVoltage").value = "";
+
+    document.getElementById("ledCurrent").value = "";
+
+    document.getElementById("resistor").value = "";
+
+
+    hideAllInputs();
+
+
+    document.getElementById("inputsSection").style.display = "none";
+
+
+    document
+        .querySelectorAll(".calculation-option")
+        .forEach(function(option) {
+
+            option.classList.remove("selected");
+
+        });
+
+
+    document
+        .getElementById("result")
+        .classList.remove("show");
+
+}
+
+</script>
+
+
+</body>
+
+</html>

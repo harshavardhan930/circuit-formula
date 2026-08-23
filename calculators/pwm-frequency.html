@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWM Frequency Calculator | Circuit Formula</title>
+    <meta name="description" content="Calculate PWM frequency, period, timer prescaler, ARR, and duty cycle for microcontrollers and embedded systems.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f8fa;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #111827;
+        }
+
+        .section {
+            padding: 60px 0 80px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .breadcrumb a:hover {
+            color: #111827;
+            text-decoration: underline;
+        }
+
+        .page-heading {
+            margin-bottom: 35px;
+        }
+
+        .page-heading h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+        .calculator-box {
+            max-width: 850px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 60px;
+        }
+
+        .step {
+            margin-bottom: 30px;
+        }
+
+        .step-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .step h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        .calculation-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .calculation-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 16px;
+            cursor: pointer;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+
+        .calculation-option:hover {
+            border-color: #9ca3af;
+        }
+
+        .calculation-option.selected {
+            border-color: #111827;
+            background: #f3f4f6;
+        }
+
+        .calculation-option strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .calculation-option span {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .pwm-box {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .pwm-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .waveform {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90px;
+            overflow: hidden;
+            color: #2563eb;
+        }
+
+        .wave-label {
+            margin-top: 12px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            transition: opacity 0.2s ease;
+        }
+
+        .input-group.hidden {
+            display: none;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .input-help {
+            display: block;
+            margin-top: 5px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-row input,
+        .input-row select {
+            flex: 1;
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 16px;
+            outline: none;
+            background: #ffffff;
+        }
+
+        .input-row input:focus,
+        .input-row select:focus {
+            border-color: #111827;
+        }
+
+        .unit {
+            min-width: 50px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .calculate-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .calculate-button:hover {
+            background: #374151;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #111827;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .reset-button:hover {
+            background: #d1d5db;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 9px;
+            background: #f3f4f6;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .result-details {
+            margin-top: 12px;
+            color: #4b5563;
+        }
+
+        .content {
+            max-width: 850px;
+        }
+
+        .content h2 {
+            margin-top: 35px;
+            margin-bottom: 12px;
+            font-size: 27px;
+        }
+
+        .content p {
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+
+        .content ul {
+            padding-left: 25px;
+            color: #4b5563;
+        }
+
+        .formula {
+            display: inline-block;
+            padding: 14px 20px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-weight: 700;
+            margin: 10px 0 20px;
+        }
+
+        .footer {
+            background: #111827;
+            color: white;
+            padding-top: 45px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+        }
+
+        .copyright {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        @media (max-width: 650px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-heading h1 {
+                font-size: 34px;
+            }
+
+            .calculator-box {
+                padding: 20px;
+            }
+
+            .calculation-options {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="container nav">
+        <a href="../index.html" class="logo">Circuit Formula</a>
+        <nav class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../index.html#categories">Categories</a>
+            <a href="../index.html#calculators">Calculators</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+<section class="section">
+<div class="container">
+
+    <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="../index.html#categories">Embedded Systems</a>
+        <span>/</span>
+        <span>PWM Frequency</span>
+    </div>
+
+    <div class="page-heading">
+        <h1>PWM Frequency Calculator</h1>
+        <p>Calculate PWM frequency, period, timer prescaler, ARR, and duty cycle.</p>
+    </div>
+
+    <div class="calculator-box">
+
+        <div class="pwm-box">
+            <div class="pwm-title">PWM Signal</div>
+            <div class="waveform">
+                <svg width="520" height="100" viewBox="0 0 520 100">
+                    <polyline points="10,75 10,25 90,25 90,75 150,75 150,25 230,25 230,75 290,75 290,25 370,25 370,75 430,75 430,25 510,25"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="4"/>
+                </svg>
+            </div>
+            <div class="wave-label">PWM frequency and duty cycle waveform</div>
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="step">
+            <div class="step-number">STEP 1</div>
+            <h2>What do you want to calculate?</h2>
+
+            <div class="calculation-options">
+                <div class="calculation-option selected" onclick="selectCalculation('frequency', this)">
+                    <strong>PWM Frequency</strong>
+                    <span>Calculate frequency from timer settings</span>
+                </div>
+
+                <div class="calculation-option" onclick="selectCalculation('period', this)">
+                    <strong>PWM Period</strong>
+                    <span>Calculate the time for one PWM cycle</span>
+                </div>
+
+                <div class="calculation-option" onclick="selectCalculation('prescaler', this)">
+                    <strong>Timer Prescaler</strong>
+                    <span>Find the required prescaler (PSC)</span>
+                </div>
+
+                <div class="calculation-option" onclick="selectCalculation('arr', this)">
+                    <strong>ARR / TOP Value</strong>
+                    <span>Calculate timer auto-reload value</span>
+                </div>
+
+                <div class="calculation-option" onclick="selectCalculation('duty', this)">
+                    <strong>Duty Cycle & CCR</strong>
+                    <span>Calculate pulse width and compare register</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step">
+            <div class="step-number">STEP 2</div>
+            <h2>Enter the values you know</h2>
+
+            <!-- CLOCK -->
+            <div class="input-group" id="group-clock">
+                <label for="timerClock">Timer Clock Frequency</label>
+                <div class="input-row">
+                    <input type="number" id="timerClock" placeholder="Example: 72" step="any" min="0">
+                    <select id="clockUnit">
+                        <option value="1">Hz</option>
+                        <option value="1000">kHz</option>
+                        <option value="1000000" selected>MHz</option>
+                    </select>
+                </div>
+                <span class="input-help">Enter the clock frequency supplied to the timer peripheral.</span>
+            </div>
+
+            <!-- PRESCALER -->
+            <div class="input-group" id="group-prescaler">
+                <label for="prescaler">Prescaler (PSC)</label>
+                <div class="input-row">
+                    <input type="number" id="prescaler" placeholder="Example: 71" step="any" min="0">
+                    <span class="unit">PSC</span>
+                </div>
+                <span class="input-help">Register value (PSC). Effective clock divider is (PSC + 1).</span>
+            </div>
+
+            <!-- ARR -->
+            <div class="input-group" id="group-arr">
+                <label for="arr">ARR / Period / TOP Value</label>
+                <div class="input-row">
+                    <input type="number" id="arr" placeholder="Example: 999" step="any" min="0">
+                    <span class="unit">ARR</span>
+                </div>
+                <span class="input-help">Timer auto-reload register value. Effective counter period is (ARR + 1).</span>
+            </div>
+
+            <!-- FREQUENCY -->
+            <div class="input-group hidden" id="group-frequency">
+                <label for="frequency">Target PWM Frequency</label>
+                <div class="input-row">
+                    <input type="number" id="frequency" placeholder="Example: 1" step="any" min="0">
+                    <select id="frequencyUnit">
+                        <option value="1">Hz</option>
+                        <option value="1000" selected>kHz</option>
+                        <option value="1000000">MHz</option>
+                    </select>
+                </div>
+                <span class="input-help">Enter the desired PWM output switching frequency.</span>
+            </div>
+
+            <!-- DUTY CYCLE -->
+            <div class="input-group hidden" id="group-duty">
+                <label for="duty">Duty Cycle (%)</label>
+                <div class="input-row">
+                    <input type="number" id="duty" placeholder="Example: 50" step="any" min="0" max="100">
+                    <span class="unit">%</span>
+                </div>
+                <span class="input-help">Enter percentage (0 to 100%).</span>
+            </div>
+
+            <button class="calculate-button" onclick="calculate()">Calculate</button>
+            <button class="reset-button" onclick="resetCalculator()">Reset</button>
+        </div>
+
+        <!-- RESULT -->
+        <div id="result" class="result">
+            <div class="result-title">Result</div>
+            <div id="resultValue" class="result-value"></div>
+            <div id="resultDetails" class="result-details"></div>
+        </div>
+
+    </div>
+
+    <article class="content">
+        <h2>What is PWM?</h2>
+        <p>PWM (Pulse Width Modulation) controls the average power delivered to a load by switching a digital signal ON and OFF at a fixed frequency while varying the pulse width.</p>
+
+        <h2>PWM Frequency Formula (Edge-Aligned)</h2>
+        <div class="formula">f_PWM = Timer Clock ÷ ((PSC + 1) × (ARR + 1))</div>
+
+        <h2>PWM Period</h2>
+        <div class="formula">T = 1 ÷ f_PWM</div>
+
+        <h2>Duty Cycle & CCR</h2>
+        <div class="formula">Duty Cycle % = (CCR ÷ (ARR + 1)) × 100</div>
+
+        <h2>Example for STM32</h2>
+        <p>For an STM32 timer running at 72 MHz with PSC = 71 and ARR = 999:</p>
+        <div class="formula">f_PWM = 72,000,000 ÷ ((71 + 1) × (999 + 1)) = 1,000 Hz = 1 kHz</div>
+
+        <h2>Common PWM Applications</h2>
+        <ul>
+            <li>DC motor speed and direction control</li>
+            <li>LED brightness and RGB color mixing</li>
+            <li>RC Servo motor control (typically 50 Hz, 1-2 ms pulse)</li>
+            <li>SMPS and DC-to-DC converters (Buck / Boost)</li>
+            <li>Audio signal synthesis and class-D amplifiers</li>
+        </ul>
+    </article>
+
+</div>
+</section>
+</main>
+
+<footer class="footer">
+    <div class="container footer-content">
+        <div>
+            <div class="logo">Circuit Formula</div>
+            <p>Electronics calculators for circuit design, embedded systems, RF, PCB and power electronics.</p>
+        </div>
+        <div class="footer-links">
+            <a href="../index.html">Home</a>
+            <a href="../about.html">About</a>
+            <a href="../contact.html">Contact</a>
+            <a href="../privacy.html">Privacy</a>
+        </div>
+    </div>
+    <div class="copyright">© 2026 Circuit Formula. All rights reserved.</div>
+</footer>
+
+<script>
+let selectedCalculation = "frequency";
+
+function updateFormVisibility() {
+    const groupClock = document.getElementById("group-clock");
+    const groupPrescaler = document.getElementById("group-prescaler");
+    const groupArr = document.getElementById("group-arr");
+    const groupFrequency = document.getElementById("group-frequency");
+    const groupDuty = document.getElementById("group-duty");
+
+    // Reset visibility
+    groupClock.classList.remove("hidden");
+    groupPrescaler.classList.remove("hidden");
+    groupArr.classList.remove("hidden");
+    groupFrequency.classList.remove("hidden");
+    groupDuty.classList.remove("hidden");
+
+    if (selectedCalculation === "frequency") {
+        groupFrequency.classList.add("hidden");
+        groupDuty.classList.add("hidden");
+    } else if (selectedCalculation === "period") {
+        groupClock.classList.add("hidden");
+        groupPrescaler.classList.add("hidden");
+        groupArr.classList.add("hidden");
+        groupDuty.classList.add("hidden");
+    } else if (selectedCalculation === "prescaler") {
+        groupPrescaler.classList.add("hidden");
+        groupDuty.classList.add("hidden");
+    } else if (selectedCalculation === "arr") {
+        groupArr.classList.add("hidden");
+        groupDuty.classList.add("hidden");
+    } else if (selectedCalculation === "duty") {
+        groupClock.classList.add("hidden");
+        groupPrescaler.classList.add("hidden");
+        // Shows ARR, Frequency (optional), and Duty
+    }
+}
+
+function selectCalculation(type, element) {
+    selectedCalculation = type;
+
+    document.querySelectorAll(".calculation-option").forEach(function(option) {
+        option.classList.remove("selected");
+    });
+
+    element.classList.add("selected");
+    document.getElementById("result").classList.remove("show");
+    updateFormVisibility();
+}
+
+function getClock() {
+    const value = parseFloat(document.getElementById("timerClock").value);
+    const unit = parseFloat(document.getElementById("clockUnit").value);
+    if (!Number.isFinite(value)) return NaN;
+    return value * unit;
+}
+
+function getFrequency() {
+    const value = parseFloat(document.getElementById("frequency").value);
+    const unit = parseFloat(document.getElementById("frequencyUnit").value);
+    if (!Number.isFinite(value)) return NaN;
+    return value * unit;
+}
+
+function calculate() {
+    const clock = getClock();
+    const prescaler = parseFloat(document.getElementById("prescaler").value);
+    const arr = parseFloat(document.getElementById("arr").value);
+    const frequency = getFrequency();
+    const duty = parseFloat(document.getElementById("duty").value);
+
+    let result;
+    let details;
+
+    /* FREQUENCY */
+    if (selectedCalculation === "frequency") {
+        if (!validPositive(clock) || !validZeroOrPositive(prescaler) || !validZeroOrPositive(arr)) {
+            showError("Please enter valid positive values for Timer Clock, Prescaler (PSC), and ARR.");
+            return;
+        }
+
+        result = clock / ((prescaler + 1) * (arr + 1));
+        const period = 1 / result;
+
+        details = "<strong>Formula:</strong> f_PWM = Timer Clock ÷ ((PSC + 1) × (ARR + 1))" +
+                  "<br><br>" +
+                  "<strong>Timer Clock:</strong> " + formatFrequency(clock) + "<br>" +
+                  "<strong>Effective Clock Divisor:</strong> " + (prescaler + 1) + "<br>" +
+                  "<strong>Total Count Cycles:</strong> " + (arr + 1) + "<br>" +
+                  "<strong>Corresponding Period (T):</strong> " + formatTime(period);
+
+        showResult(formatFrequency(result), details);
+        return;
+    }
+
+    /* PERIOD */
+    if (selectedCalculation === "period") {
+        if (!validPositive(frequency)) {
+            showError("Please enter a valid PWM target frequency.");
+            return;
+        }
+
+        result = 1 / frequency;
+        details = "<strong>Formula:</strong> T = 1 ÷ f_PWM" +
+                  "<br><br>" +
+                  "<strong>Frequency:</strong> " + formatFrequency(frequency);
+
+        showResult(formatTime(result), details);
+        return;
+    }
+
+    /* PRESCALER */
+    if (selectedCalculation === "prescaler") {
+        if (!validPositive(clock) || !validPositive(frequency) || !validZeroOrPositive(arr)) {
+            showError("Please enter valid values for Timer Clock, Target Frequency, and ARR.");
+            return;
+        }
+
+        result = (clock / (frequency * (arr + 1))) - 1;
+        const nearestPSC = Math.max(0, Math.round(result));
+        const actualFreq = clock / ((nearestPSC + 1) * (arr + 1));
+        const error = ((actualFreq - frequency) / frequency) * 100;
+
+        details = "<strong>Formula:</strong> PSC = [Clock ÷ (f_PWM × (ARR + 1))] - 1" +
+                  "<br><br>" +
+                  "<strong>Exact PSC:</strong> " + result.toFixed(4) + "<br>" +
+                  "<strong>Nearest Integer PSC:</strong> " + nearestPSC + "<br>" +
+                  "<strong>Actual PWM Frequency with PSC=" + nearestPSC + ":</strong> " + formatFrequency(actualFreq) + " (" + (error >= 0 ? "+" : "") + error.toFixed(2) + "% error)";
+
+        showResult(result.toFixed(4), details);
+        return;
+    }
+
+    /* ARR */
+    if (selectedCalculation === "arr") {
+        if (!validPositive(clock) || !validPositive(frequency) || !validZeroOrPositive(prescaler)) {
+            showError("Please enter valid values for Timer Clock, Target Frequency, and Prescaler (PSC).");
+            return;
+        }
+
+        result = (clock / (frequency * (prescaler + 1))) - 1;
+        const nearestARR = Math.max(0, Math.round(result));
+        const actualFreq = clock / ((prescaler + 1) * (nearestARR + 1));
+        const error = ((actualFreq - frequency) / frequency) * 100;
+
+        details = "<strong>Formula:</strong> ARR = [Clock ÷ (f_PWM × (PSC + 1))] - 1" +
+                  "<br><br>" +
+                  "<strong>Exact ARR:</strong> " + result.toFixed(4) + "<br>" +
+                  "<strong>Nearest Integer ARR:</strong> " + nearestARR + "<br>" +
+                  "<strong>Actual PWM Frequency with ARR=" + nearestARR + ":</strong> " + formatFrequency(actualFreq) + " (" + (error >= 0 ? "+" : "") + error.toFixed(2) + "% error)";
+
+        showResult(result.toFixed(4), details);
+        return;
+    }
+
+    /* DUTY CYCLE & CCR */
+    if (selectedCalculation === "duty") {
+        if (!Number.isFinite(duty) || duty < 0 || duty > 100) {
+            showError("Please enter a valid duty cycle between 0% and 100%.");
+            return;
+        }
+
+        let extraDetails = "";
+
+        if (validZeroOrPositive(arr)) {
+            const ccr = Math.round((duty / 100) * (arr + 1));
+            extraDetails += "<br><strong>Target CCR (Compare Register):</strong> " + ccr + " (for ARR = " + arr + ")";
+        }
+
+        if (validPositive(frequency)) {
+            const period = 1 / frequency;
+            const tOn = period * (duty / 100);
+            const tOff = period - tOn;
+            extraDetails += "<br><strong>ON Time (t_high):</strong> " + formatTime(tOn) +
+                            "<br><strong>OFF Time (t_low):</strong> " + formatTime(tOff) +
+                            "<br><strong>Total Period:</strong> " + formatTime(period);
+        }
+
+        details = "<strong>Formula:</strong> Duty Cycle = (CCR ÷ (ARR + 1)) × 100" +
+                  "<br><br>" +
+                  "<strong>Selected Duty:</strong> " + duty.toFixed(2) + "%" +
+                  extraDetails;
+
+        showResult(duty.toFixed(2) + " %", details);
+    }
+}
+
+function validPositive(value) {
+    return Number.isFinite(value) && value > 0;
+}
+
+function validZeroOrPositive(value) {
+    return Number.isFinite(value) && value >= 0;
+}
+
+function formatFrequency(value) {
+    if (value >= 1000000000) {
+        return Number((value / 1000000000).toFixed(4)) + " GHz";
+    }
+    if (value >= 1000000) {
+        return Number((value / 1000000).toFixed(4)) + " MHz";
+    }
+    if (value >= 1000) {
+        return Number((value / 1000).toFixed(4)) + " kHz";
+    }
+    return Number(value.toFixed(2)) + " Hz";
+}
+
+function formatTime(seconds) {
+    if (seconds >= 1) {
+        return Number(seconds.toFixed(4)) + " s";
+    }
+    if (seconds >= 0.001) {
+        return Number((seconds * 1000).toFixed(4)) + " ms";
+    }
+    if (seconds >= 0.000001) {
+        return Number((seconds * 1000000).toFixed(4)) + " µs";
+    }
+    return Number((seconds * 1000000000).toFixed(2)) + " ns";
+}
+
+function showResult(value, details) {
+    document.getElementById("resultValue").textContent = value;
+    document.getElementById("resultDetails").innerHTML = details;
+    document.getElementById("result").classList.add("show");
+}
+
+function showError(message) {
+    document.getElementById("resultValue").textContent = "Input Error";
+    document.getElementById("resultDetails").innerHTML = "<span style='color: #dc2626;'>" + message + "</span>";
+    document.getElementById("result").classList.add("show");
+}
+
+function resetCalculator() {
+    document.getElementById("timerClock").value = "";
+    document.getElementById("prescaler").value = "";
+    document.getElementById("arr").value = "";
+    document.getElementById("frequency").value = "";
+    document.getElementById("duty").value = "";
+    document.getElementById("clockUnit").value = "1000000";
+    document.getElementById("frequencyUnit").value = "1000";
+
+    selectedCalculation = "frequency";
+
+    document.querySelectorAll(".calculation-option").forEach(function(option) {
+        option.classList.remove("selected");
+    });
+    document.querySelector(".calculation-option").classList.add("selected");
+
+    document.getElementById("result").classList.remove("show");
+    updateFormVisibility();
+}
+
+// Initialize on page load
+updateFormVisibility();
+</script>
+
+</body>
+</html>

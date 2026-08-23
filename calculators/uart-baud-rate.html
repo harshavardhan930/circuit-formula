@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UART Baud Rate Calculator | Circuit Formula</title>
+    <meta name="description" content="Calculate UART baud rate, clock frequency, baud divider, and UART error for embedded systems and microcontrollers.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f8fa;
+            color: #172033;
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1180px, 92%);
+            margin: auto;
+        }
+
+        /* HEADER */
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: #111827;
+        }
+
+        /* MAIN */
+        .section {
+            padding: 60px 0 80px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .breadcrumb a:hover {
+            color: #111827;
+            text-decoration: underline;
+        }
+
+        .page-heading {
+            margin-bottom: 35px;
+        }
+
+        .page-heading h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+        /* CALCULATOR */
+        .calculator-box {
+            max-width: 850px;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 30px;
+            margin-bottom: 60px;
+        }
+
+        .step {
+            margin-bottom: 30px;
+        }
+
+        .step-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .step h2 {
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        /* OPTIONS */
+        .calculation-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .calculation-option {
+            border: 2px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 16px;
+            cursor: pointer;
+            background: #ffffff;
+            transition: 0.2s;
+        }
+
+        .calculation-option:hover {
+            border-color: #9ca3af;
+        }
+
+        .calculation-option.selected {
+            border-color: #111827;
+            background: #f3f4f6;
+        }
+
+        .calculation-option strong {
+            display: block;
+            font-size: 17px;
+        }
+
+        .calculation-option span {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        /* UART DIAGRAM */
+        .uart-box {
+            background: #fafafa;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .uart-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .uart-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .uart-device {
+            padding: 18px 25px;
+            border: 2px solid #374151;
+            border-radius: 8px;
+            background: #ffffff;
+            font-weight: 700;
+        }
+
+        .uart-tx {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .uart-rx {
+            border-color: #059669;
+            color: #059669;
+        }
+
+        .uart-wire {
+            font-weight: 700;
+            color: #6b7280;
+        }
+
+        /* INPUTS */
+        .input-group {
+            margin-bottom: 20px;
+            transition: opacity 0.2s ease;
+        }
+
+        .input-group.hidden {
+            display: none;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .input-help {
+            display: block;
+            margin-top: 5px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-row input,
+        .input-row select {
+            flex: 1;
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 16px;
+            outline: none;
+            background: #ffffff;
+        }
+
+        .input-row input:focus,
+        .input-row select:focus {
+            border-color: #111827;
+        }
+
+        .unit {
+            min-width: 45px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        /* BUTTONS */
+        .calculate-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .calculate-button:hover {
+            background: #374151;
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #111827;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .reset-button:hover {
+            background: #d1d5db;
+        }
+
+        /* RESULT */
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 9px;
+            background: #f3f4f6;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-title {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .result-details {
+            margin-top: 12px;
+            color: #4b5563;
+        }
+
+        /* CONTENT */
+        .content {
+            max-width: 850px;
+        }
+
+        .content h2 {
+            margin-top: 35px;
+            margin-bottom: 12px;
+            font-size: 27px;
+        }
+
+        .content p {
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+
+        .content ul {
+            padding-left: 25px;
+            color: #4b5563;
+        }
+
+        .formula {
+            display: inline-block;
+            padding: 14px 20px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-weight: 700;
+            margin: 10px 0 20px;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: #111827;
+            color: white;
+            padding-top: 45px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer p {
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+        }
+
+        .copyright {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 650px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-heading h1 {
+                font-size: 34px;
+            }
+
+            .calculator-box {
+                padding: 20px;
+            }
+
+            .calculation-options {
+                grid-template-columns: 1fr;
+            }
+
+            .uart-diagram {
+                flex-direction: column;
+            }
+
+            .uart-wire {
+                transform: rotate(90deg);
+            }
+
+            .footer-content {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="container nav">
+        <a href="../index.html" class="logo">Circuit Formula</a>
+        <nav class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="../index.html#categories">Categories</a>
+            <a href="../index.html#calculators">Calculators</a>
+        </nav>
+    </div>
+</header>
+
+<main>
+<section class="section">
+<div class="container">
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+        <a href="../index.html">Home</a>
+        <span>/</span>
+        <a href="../index.html#categories">Embedded Systems</a>
+        <span>/</span>
+        <span>UART Baud Rate</span>
+    </div>
+
+    <!-- HEADING -->
+    <div class="page-heading">
+        <h1>UART Baud Rate Calculator</h1>
+        <p>Calculate UART baud rate, clock divider, actual baud rate and baud error.</p>
+    </div>
+
+    <div class="calculator-box">
+
+        <!-- UART DIAGRAM -->
+        <div class="uart-box">
+            <div class="uart-title">UART Communication</div>
+            <div class="uart-diagram">
+                <div class="uart-device uart-tx">MCU A<br>TX</div>
+                <div class="uart-wire">→</div>
+                <div class="uart-device">UART</div>
+                <div class="uart-wire">→</div>
+                <div class="uart-device uart-rx">MCU B<br>RX</div>
+            </div>
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="step">
+            <div class="step-number">STEP 1</div>
+            <h2>What do you want to calculate?</h2>
+
+            <div class="calculation-options">
+                <div class="calculation-option selected" onclick="selectCalculation('baud', this)">
+                    <strong>Baud Rate</strong>
+                    <span>Calculate baud rate from clock and divider</span>
+                </div>
+
+                <div class="calculation-option" onclick="selectCalculation('divider', this)">
+                    <strong>Baud Divider</strong>
+                    <span>Find the divider value</span>
+                </div>
+
+                <div class="calculation-option" onclick="selectCalculation('clock', this)">
+                    <strong>Clock Frequency</strong>
+                    <span>Find required UART clock</span>
+                </div>
+
+                <div class="calculation-option" onclick="selectCalculation('error', this)">
+                    <strong>Baud Error</strong>
+                    <span>Compare desired and actual baud rate</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step">
+            <div class="step-number">STEP 2</div>
+            <h2>Enter the values you know</h2>
+
+            <!-- CLOCK -->
+            <div class="input-group" id="group-clock">
+                <label for="clock">UART Clock Frequency</label>
+                <div class="input-row">
+                    <input type="number" id="clock" placeholder="Example: 16" step="any" min="0">
+                    <select id="clockUnit">
+                        <option value="1">Hz</option>
+                        <option value="1000">kHz</option>
+                        <option value="1000000" selected>MHz</option>
+                    </select>
+                </div>
+                <span class="input-help">Enter the clock supplied to the UART peripheral.</span>
+            </div>
+
+            <!-- DESIRED BAUD -->
+            <div class="input-group hidden" id="group-desiredBaud">
+                <label for="desiredBaud">Desired Baud Rate</label>
+                <div class="input-row">
+                    <input type="number" id="desiredBaud" placeholder="Example: 115200" step="any" min="0">
+                    <span class="unit">baud</span>
+                </div>
+                <span class="input-help">Common values include 9600, 19200, 38400, 57600 and 115200.</span>
+            </div>
+
+            <!-- DIVIDER -->
+            <div class="input-group" id="group-divider">
+                <label for="divider">Baud Divider (USARTDIV / Prescaler)</label>
+                <div class="input-row">
+                    <input type="number" id="divider" placeholder="Example: 8.6806" step="any" min="0">
+                    <span class="unit">N</span>
+                </div>
+                <span class="input-help">The integer or fractional clock divisor used by the baud rate generator.</span>
+            </div>
+
+            <!-- OVERSAMPLING -->
+            <div class="input-group" id="group-oversampling">
+                <label for="oversampling">UART Oversampling</label>
+                <div class="input-row">
+                    <select id="oversampling">
+                        <option value="16" selected>16x (Standard)</option>
+                        <option value="8">8x (High Speed)</option>
+                        <option value="1">1x (Direct / Synchronous)</option>
+                    </select>
+                </div>
+                <span class="input-help">Use the oversampling value specified by your MCU UART peripheral.</span>
+            </div>
+
+            <!-- ACTUAL BAUD -->
+            <div class="input-group hidden" id="group-actualBaud">
+                <label for="actualBaud">Actual Baud Rate (Optional)</label>
+                <div class="input-row">
+                    <input type="number" id="actualBaud" placeholder="Leave blank to auto-calculate from clock" step="any" min="0">
+                    <span class="unit">baud</span>
+                </div>
+                <span class="input-help">Directly input the measured/actual rate, or fill Clock and Desired Baud to auto-compute.</span>
+            </div>
+
+            <button class="calculate-button" onclick="calculate()">Calculate</button>
+            <button class="reset-button" onclick="resetCalculator()">Reset</button>
+        </div>
+
+        <!-- RESULT -->
+        <div id="result" class="result">
+            <div class="result-title">Result</div>
+            <div id="resultValue" class="result-value"></div>
+            <div id="resultDetails" class="result-details"></div>
+        </div>
+
+    </div>
+
+    <!-- INFORMATION -->
+    <article class="content">
+        <h2>What is UART Baud Rate?</h2>
+        <p>Baud rate defines how quickly UART communication transfers symbols per second. For typical NRZ binary UART configurations, one symbol represents one bit.</p>
+
+        <h2>Basic UART Formula</h2>
+        <div class="formula">Baud Rate = UART Clock ÷ (Oversampling × Divider)</div>
+
+        <h2>Example</h2>
+        <p>Suppose a microcontroller has a 16 MHz UART clock, uses 16x oversampling, and the divider is 8.6806.</p>
+        <div class="formula">Baud Rate = 16,000,000 ÷ (16 × 8.6806) ≈ 115200 baud</div>
+
+        <h2>Common UART Baud Rates</h2>
+        <ul>
+            <li>1200 baud</li>
+            <li>2400 baud</li>
+            <li>4800 baud</li>
+            <li>9600 baud</li>
+            <li>19200 baud</li>
+            <li>38400 baud</li>
+            <li>57600 baud</li>
+            <li>115200 baud</li>
+            <li>230400 baud</li>
+            <li>460800 baud</li>
+            <li>921600 baud</li>
+        </ul>
+
+        <h2>Baud Rate Error Formula</h2>
+        <div class="formula">Error % = ((Actual Baud - Desired Baud) ÷ Desired Baud) × 100</div>
+        <p>Standard UART tolerance typically allows up to ±2% to ±3% error before frame errors and bit misalignments occur.</p>
+    </article>
+
+</div>
+</section>
+</main>
+
+<footer class="footer">
+    <div class="container footer-content">
+        <div>
+            <div class="logo">Circuit Formula</div>
+            <p>Electronics calculators for circuit design, embedded systems, RF, PCB and power electronics.</p>
+        </div>
+        <div class="footer-links">
+            <a href="../index.html">Home</a>
+            <a href="../about.html">About</a>
+            <a href="../contact.html">Contact</a>
+            <a href="../privacy.html">Privacy</a>
+        </div>
+    </div>
+    <div class="copyright">© 2026 Circuit Formula. All rights reserved.</div>
+</footer>
+
+<script>
+let selectedCalculation = "baud";
+
+function updateFormVisibility() {
+    const groupClock = document.getElementById("group-clock");
+    const groupDesiredBaud = document.getElementById("group-desiredBaud");
+    const groupDivider = document.getElementById("group-divider");
+    const groupOversampling = document.getElementById("group-oversampling");
+    const groupActualBaud = document.getElementById("group-actualBaud");
+
+    // Reset visibility
+    groupClock.classList.remove("hidden");
+    groupDesiredBaud.classList.remove("hidden");
+    groupDivider.classList.remove("hidden");
+    groupOversampling.classList.remove("hidden");
+    groupActualBaud.classList.remove("hidden");
+
+    if (selectedCalculation === "baud") {
+        groupDesiredBaud.classList.add("hidden");
+        groupActualBaud.classList.add("hidden");
+    } else if (selectedCalculation === "divider") {
+        groupDivider.classList.add("hidden");
+        groupActualBaud.classList.add("hidden");
+    } else if (selectedCalculation === "clock") {
+        groupClock.classList.add("hidden");
+        groupActualBaud.classList.add("hidden");
+    } else if (selectedCalculation === "error") {
+        // Keeps clock, desired baud, oversampling and optional actual baud visible
+        groupDivider.classList.add("hidden");
+    }
+}
+
+function selectCalculation(type, element) {
+    selectedCalculation = type;
+
+    document.querySelectorAll(".calculation-option").forEach(function(option) {
+        option.classList.remove("selected");
+    });
+
+    element.classList.add("selected");
+    document.getElementById("result").classList.remove("show");
+    updateFormVisibility();
+}
+
+function getClock() {
+    const value = parseFloat(document.getElementById("clock").value);
+    const unit = parseFloat(document.getElementById("clockUnit").value);
+    if (!Number.isFinite(value)) return NaN;
+    return value * unit;
+}
+
+function calculate() {
+    const clock = getClock();
+    const desiredBaud = parseFloat(document.getElementById("desiredBaud").value);
+    const divider = parseFloat(document.getElementById("divider").value);
+    const oversampling = parseFloat(document.getElementById("oversampling").value);
+    const actualBaudInput = parseFloat(document.getElementById("actualBaud").value);
+
+    let result;
+    let details;
+
+    /* BAUD RATE */
+    if (selectedCalculation === "baud") {
+        if (!validPositive(clock) || !validPositive(divider) || !validPositive(oversampling)) {
+            showError("Please enter valid positive values for Clock Frequency and Divider.");
+            return;
+        }
+
+        result = clock / (oversampling * divider);
+        details = "<strong>Formula:</strong> Baud Rate = Clock ÷ (Oversampling × Divider)" +
+                  "<br><br>" +
+                  "<strong>Clock:</strong> " + formatFrequency(clock) + "<br>" +
+                  "<strong>Oversampling:</strong> " + oversampling + "x<br>" +
+                  "<strong>Divider:</strong> " + divider;
+
+        showResult(formatBaud(result), details);
+        return;
+    }
+
+    /* DIVIDER */
+    if (selectedCalculation === "divider") {
+        if (!validPositive(clock) || !validPositive(desiredBaud) || !validPositive(oversampling)) {
+            showError("Please enter valid positive values for Clock Frequency and Desired Baud Rate.");
+            return;
+        }
+
+        result = clock / (oversampling * desiredBaud);
+        const intDivider = Math.round(result);
+        const actualFromInt = clock / (oversampling * intDivider);
+        const intError = ((actualFromInt - desiredBaud) / desiredBaud) * 100;
+
+        details = "<strong>Formula:</strong> Divider = Clock ÷ (Oversampling × Baud Rate)" +
+                  "<br><br>" +
+                  "<strong>Exact Value:</strong> " + result.toFixed(6) + "<br>" +
+                  "<strong>Nearest Integer (for integer BRGs):</strong> " + intDivider + "<br>" +
+                  "<strong>Integer Divider Error:</strong> " + (intError >= 0 ? "+" : "") + intError.toFixed(3) + "%";
+
+        showResult(result.toFixed(4), details);
+        return;
+    }
+
+    /* CLOCK */
+    if (selectedCalculation === "clock") {
+        if (!validPositive(desiredBaud) || !validPositive(divider) || !validPositive(oversampling)) {
+            showError("Please enter valid positive values for Desired Baud Rate and Divider.");
+            return;
+        }
+
+        result = desiredBaud * oversampling * divider;
+        details = "<strong>Formula:</strong> Clock = Baud Rate × Oversampling × Divider" +
+                  "<br><br>" +
+                  "<strong>Desired Baud:</strong> " + formatBaud(desiredBaud) + "<br>" +
+                  "<strong>Oversampling:</strong> " + oversampling + "x<br>" +
+                  "<strong>Divider:</strong> " + divider;
+
+        showResult(formatFrequency(result), details);
+        return;
+    }
+
+    /* BAUD ERROR */
+    if (selectedCalculation === "error") {
+        if (!validPositive(desiredBaud)) {
+            showError("Please specify a valid Desired Baud Rate.");
+            return;
+        }
+
+        let computedActualBaud;
+
+        if (validPositive(actualBaudInput)) {
+            computedActualBaud = actualBaudInput;
+        } else if (validPositive(clock) && validPositive(oversampling)) {
+            const idealDivider = clock / (oversampling * desiredBaud);
+            const appliedDivider = Math.round(idealDivider);
+            computedActualBaud = clock / (oversampling * appliedDivider);
+        } else {
+            showError("Enter either an Actual Baud Rate OR Clock Frequency + Oversampling to auto-calculate.");
+            return;
+        }
+
+        const error = ((computedActualBaud - desiredBaud) / desiredBaud) * 100;
+        const statusClass = Math.abs(error) <= 3.0 ? "Acceptable (< 3%)" : "High Error (> 3%, communication may fail)";
+
+        details = "<strong>Desired Baud:</strong> " + formatBaud(desiredBaud) + "<br>" +
+                  "<strong>Actual Baud:</strong> " + formatBaud(computedActualBaud) + "<br>" +
+                  "<strong>Tolerance Status:</strong> " + statusClass + "<br><br>" +
+                  "<em>A positive value means the actual baud is faster; negative means slower.</em>";
+
+        showResult((error >= 0 ? "+" : "") + error.toFixed(4) + " %", details);
+    }
+}
+
+function validPositive(value) {
+    return Number.isFinite(value) && value > 0;
+}
+
+function formatBaud(value) {
+    return Number(value.toFixed(2)).toLocaleString() + " baud";
+}
+
+function formatFrequency(value) {
+    if (value >= 1000000000) {
+        return Number((value / 1000000000).toFixed(4)) + " GHz";
+    }
+    if (value >= 1000000) {
+        return Number((value / 1000000).toFixed(4)) + " MHz";
+    }
+    if (value >= 1000) {
+        return Number((value / 1000).toFixed(4)) + " kHz";
+    }
+    return Number(value.toFixed(2)) + " Hz";
+}
+
+function showResult(value, details) {
+    document.getElementById("resultValue").textContent = value;
+    document.getElementById("resultDetails").innerHTML = details;
+    document.getElementById("result").classList.add("show");
+}
+
+function showError(message) {
+    document.getElementById("resultValue").textContent = "Input Error";
+    document.getElementById("resultDetails").innerHTML = "<span style='color: #dc2626;'>" + message + "</span>";
+    document.getElementById("result").classList.add("show");
+}
+
+function resetCalculator() {
+    document.getElementById("clock").value = "";
+    document.getElementById("desiredBaud").value = "";
+    document.getElementById("divider").value = "";
+    document.getElementById("actualBaud").value = "";
+    document.getElementById("clockUnit").value = "1000000";
+    document.getElementById("oversampling").value = "16";
+
+    selectedCalculation = "baud";
+
+    document.querySelectorAll(".calculation-option").forEach(function(option) {
+        option.classList.remove("selected");
+    });
+    document.querySelector(".calculation-option").classList.add("selected");
+
+    document.getElementById("result").classList.remove("show");
+    updateFormVisibility();
+}
+
+// Initial state setup
+updateFormVisibility();
+</script>
+
+</body>
+</html>
