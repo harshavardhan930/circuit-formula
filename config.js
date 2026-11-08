@@ -4,6 +4,6 @@
   Do not add a trailing slash.
 */
 window.IOT_CONFIG = {
-  API_BASE_URL: "https://circuitformula.in",
+  API_BASE_URL: "https://circuit-formula.raju2292003.workers.dev",
   REFRESH_INTERVAL_MS: 5000
 };
